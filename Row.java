@@ -4,7 +4,24 @@ public class Row {
     //Make the below fields private and make getters and setters.
     String tableName;
     int seekPos;
+    int rowLength;
     LinkedHashMap<String,Object> rowDetails;
+
+    public void setSeekPos(int seekPos){
+        this.seekPos=seekPos;
+    }
+
+    public int getSeekPos(){
+        return seekPos;
+    }
+
+    public void setRowLength(int rowLength){
+        this.rowLength = rowLength;
+    }
+    
+    public int getRowLength(){
+        return rowLength;
+    }
 
     public Row(String tableName){
         this.tableName=tableName;

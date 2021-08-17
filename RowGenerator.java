@@ -48,6 +48,8 @@ public class RowGenerator implements RowGeneratorImpl{
         		ptr+=columnVsSize.get(key);
 			}
 			row.setRowDetails(rowDetails);
+			row.setSeekPos(current_row_no);
+			row.setRowLength(total_row_size);
 			current_row_no+=total_row_size;
 			return row;
 		  }
