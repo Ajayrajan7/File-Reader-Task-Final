@@ -1,0 +1,2 @@
+users=user_id:Integer,name:String,email:String,password:String
+log_details=user_id:Integer,fileName:String
