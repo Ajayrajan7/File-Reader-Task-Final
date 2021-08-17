@@ -1,28 +1,29 @@
 import java.util.*;
 import java.io.*;
-
 public class RowGenerator implements RowGeneratorImpl{
-	private String fileName;
+	private String tableName;
 	private int total_row_size;
 	private int current_row_no=0;
 	private RandomAccessFile raf = null;
 	private byte[] buffer;
-	private static LinkedHashMap<String,Integer> columnVsSize;
-	private static LinkedHashMap<String,Types> tablesVsFieldDetails;
+	private LinkedHashMap<String,Integer> columnVsSize;
+	private LinkedHashMap<String,Types> tablesVsFieldDetails;
+	private boolean EXHAUSTED = false;
 
-	public RowGenerator(String tableName){
-		this.fileName=tableName;
+	public RowGenerator(String tableName) throws FileNotFoundException{
+		this.tableName=tableName;
 		this.raf = new RandomAccessFile(GetTableDetails.dataPath+"\\"+tableName+".txt", "rw");
-		this.columnVsSize = (GetTableDetails.tableVsSize(tableName));
-		this.tablesVsFieldDetails = (GetTableDetails.tablesVsFieldDetails);
+		this.columnVsSize = GetTableDetails.tableVsSize.get(tableName);
+		this.tablesVsFieldDetails = GetTableDetails.tablesVsFieldDetails.get(tableName);
 		this.total_row_size=columnVsSize.get("Total_Row_Size")+1;
 		this.buffer = new byte[total_row_size];
 	}
 
-	public Row next(){
-		try{
+	@Override
+	public Row next() throws RowExhausedException{
+		   
 			LinkedHashMap<String,Object> rowDetails = new LinkedHashMap<>();
-			Row row = new Row(fileName);
+			Row row = new Row(tableName);
 			int ptr=0;
 			//Iterating each column in the buffer.
 			for(String key:columnVsSize.keySet()){
@@ -49,21 +50,24 @@ public class RowGenerator implements RowGeneratorImpl{
 			row.setRowDetails(rowDetails);
 			current_row_no+=total_row_size;
 			return row;
-
-		}catch(Exception e){
-			System.out.println(e);
-		}
-		return null;
-	}
+		  }
+	@Override
 	public boolean haxNext(){
 		try{
 			raf.seek(current_row_no);
 			raf.read(buffer);
       		return true;
-	   	} catch(EOFException e){
+	   	} catch(){
 	      	System.out.println(e);
 	   	}
-	   	raf.close();
+		finally{
+			try {
+				raf.close();
+			}
+			catch(IOException e){
+				e.printStackTrace();
+			}
+		}
 	   	return false;
 	}
 }
