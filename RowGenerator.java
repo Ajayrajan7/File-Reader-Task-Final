@@ -15,7 +15,7 @@ public class RowGenerator implements RowGeneratorImpl{
 		this.raf = new RandomAccessFile(GetTableDetails.dataPath+"\\"+tableName+".txt", "rw");
 		this.columnVsSize = GetTableDetails.tableVsSize.get(tableName);
 		this.tablesVsFieldDetails = GetTableDetails.tablesVsFieldDetails.get(tableName);
-		this.total_row_size=columnVsSize.get("Total_Row_Size")+1;
+		this.total_row_size=columnVsSize.get("Total_Row_Size")+3;
 		this.buffer = new byte[total_row_size];
 	}
 
@@ -24,7 +24,7 @@ public class RowGenerator implements RowGeneratorImpl{
 		   
 			LinkedHashMap<String,Object> rowDetails = new LinkedHashMap<>();
 			Row row = new Row(tableName);
-			int ptr=0;
+			int ptr=1;
 			//Iterating each column in the buffer.
 			for(String key:columnVsSize.keySet()){
 				String data = new String(buffer,ptr,ptr+columnVsSize.get(key));
@@ -52,12 +52,21 @@ public class RowGenerator implements RowGeneratorImpl{
 			row.setRowLength(total_row_size);
 			current_row_no+=total_row_size;
 			return row;
-		  }
+	}
+
+
 	@Override
 	public boolean haxNext(){
 		try{
 			raf.seek(current_row_no);
 			raf.read(buffer);
+
+			//Ignoring rows that starts with '0'
+			while(buffer[0]!=1){
+				current_row_no+=total_row_size;
+				raf.seek(current_row_no);
+				raf.read(buffer);
+			}
       		return true;
 	   	} catch(){
 	      	System.out.println(e);

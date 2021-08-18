@@ -12,7 +12,6 @@ public class GetTableDetails {
         Properties props2 = parseProps("C:\\Users\\AjaySandhya\\Desktop\\File DB\\conf\\dataconfig.props");
         dataPath = props2.getProperty("DataLocation");
         createTablesVsFields(props);
-
     }
 
     private static Properties parseProps(String path) throws IOException{
@@ -34,6 +33,22 @@ public class GetTableDetails {
             System.out.println("File exists already");
         }
     }
+    private static void createPropsFileForDeletionTracking(String key){
+        File f = new File("C:\\Users\\AjaySandhya\\Desktop\\File DB\\config\\"+key+"."+props);
+        if(!f.exists()){
+            try{
+                f.createNewFile();
+                Properties p = new Properties();
+                p.setProperty(key,"0");
+                p.store(new FileOutputStream("C:\\Users\\AjaySandhya\\Desktop\\File DB\\config\\"+key+"."+props),"Props file for tracking delete rows");
+                System.out.println("New file is for deletion tracking");
+            }catch(Exception e){
+                System.out.println(e);
+            }
+        }else{
+            System.out.println("File exists already");
+        }
+    }
 
     public static LinkedHashMap<String,Class> getFieldVsTypes(String tableName){
         return tablesVsFieldDetails.get(tableName);
@@ -43,6 +58,7 @@ public class GetTableDetails {
 
         for(String key : properties.stringPropertyNames()) {
             createFileIfNotExists(key);
+            createPropsFileForDeletionTracking(key);
             String value = properties.getProperty(key);
             try {
                 tablesVsFieldDetails.put(key,getFieldVsTypes_(value));

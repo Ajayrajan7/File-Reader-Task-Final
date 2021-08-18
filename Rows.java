@@ -21,6 +21,7 @@ public class Rows{
     		BufferedWriter bw = new BufferedWriter(fw);
     		PrintWriter out = new PrintWriter(bw);
     		for(LinkedHashMap<String,Object> map:OrderedRows){
+				out.print(1);
     			for(Map.Entry<String,Object> entry:map.entrySet()){
     				out.print(entry.getValue());
     			}

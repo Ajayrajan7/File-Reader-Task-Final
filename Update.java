@@ -15,8 +15,9 @@ public class Update{
         RowGenerator rowGen = new RowGenerator(tablename);
         while(rowGen.hasNext()){
             this.r = rowGen.next();
-            ReducerUtil.initialize(r,criteria.TOP)
-            if(ReducerUtil.parseAllCriterasAndReturnFinalBoolean()){
+            ReducerUtil reducerUtil = new ReducerUtil();
+            reducerUtil.initialize(r,criteria.TOP);
+            if(reducerUtil.parseAllCriterasAndReturnFinalBoolean()){
                 if(updateCurrentRow(r)){
                     continue;
                 }else{

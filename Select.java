@@ -28,8 +28,9 @@ public class Select {
         List<Row> results = new ArrayList<>();
         while(rowGen.hasNext()){
             this.r = rowGen.next();
-            ReducerUtil.initialize(r,criteria.TOP)
-            if(ReducerUtil.parseAllCriterasAndReturnFinalBoolean()){
+            ReducerUtil reducerUtil = new ReducerUtil();
+            reducerUtil.initialize(r,criteria.TOP)
+            if(reducerUtil.parseAllCriterasAndReturnFinalBoolean()){
                 results.add(r);
             }
         }
@@ -117,18 +118,18 @@ class Expression{
 } 
 
 class ReducerUtil {
-    private static boolean LHS = true;
-    private static Row row;
-    private static List<WrappedCondition> TOP;
-    private static int POSITION = 0;
+    private  boolean LHS = true;
+    private  Row row;
+    private  List<WrappedCondition> TOP;
+    private  int POSITION = 0;
 
-    public static void initialize(Row row, List<WrappedCondition> TOP){
+    public  void initialize(Row row, List<WrappedCondition> TOP){
         ReducerUtil.row = row;
         ReducerUtil.TOP = TOP;
         LHS = true;
     }
 
-    public static boolean parseAllCriterasAndReturnFinalBoolean(){
+    public  boolean parseAllCriterasAndReturnFinalBoolean(){
         if(TOP.size()==0) return LHS;
         while((POSITION+1) != TOP.size()){
             LHS = reduce(LHS,TOP.get(POSITION));
@@ -137,7 +138,7 @@ class ReducerUtil {
         
      }
  
-     public static boolean reduce(boolean LHS,WrappedCondition RHS){
+     public  boolean reduce(boolean LHS,WrappedCondition RHS){
          final String USERKEY = RHS.getExpression().getLHSKEY();
          final boolean RHSSTATUS = RHS.getExpression().evaluate(row.getColumn(USERKEY));
          switch(RHS.getExpressionName()){
@@ -149,7 +150,7 @@ class ReducerUtil {
                  return false;
          }
      }
-    public static void reset(){
+    public  void reset(){
         LHS = true;
         row = null;
     }
