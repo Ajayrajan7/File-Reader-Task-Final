@@ -43,7 +43,7 @@ public class Row {
           return  (double)rowDetails.get(columnName);
         }
         catch(NullPointerException ex){
-            throw NoSuchColumnException("Column "+columnName+" is not found in the table " +tableName);
+            throw new NoSuchColumnException("Column "+columnName+" is not found in the table " +tableName);
         }
         
     }
@@ -55,7 +55,7 @@ public class Row {
             return (long)rowDetails.get(columnName);
           }
           catch(NullPointerException ex){
-              throw NoSuchColumnException("Column "+columnName+" is not found in the table " +tableName);
+              throw new NoSuchColumnException("Column "+columnName+" is not found in the table " +tableName);
           }
     }
 
@@ -64,7 +64,7 @@ public class Row {
             return (int)rowDetails.get(columnName);
           }
           catch(NullPointerException ex){
-              throw NoSuchColumnException("Column "+columnName+" is not found in the table " +tableName);
+              throw new NoSuchColumnException("Column "+columnName+" is not found in the table " +tableName);
           }
     }
 
@@ -73,14 +73,14 @@ public class Row {
             return (float)rowDetails.get(columnName);
           }
           catch(NullPointerException ex){
-              throw NoSuchColumnException("Column "+columnName+" is not found in the table " +tableName);
+              throw new NoSuchColumnException("Column "+columnName+" is not found in the table " +tableName);
           }
     }
 
     String getString(String columnName) throws ClassCastException,NoSuchColumnException{
         //get the field
         String temp = (String)rowDetails.get(columnName);
-        if(null == temp)  throw NoSuchColumnException("Column "+columnName+" is not found in the table " +tableName);
+        if(null == temp)  throw new NoSuchColumnException("Column "+columnName+" is not found in the table " +tableName);
         return temp;
     }
 

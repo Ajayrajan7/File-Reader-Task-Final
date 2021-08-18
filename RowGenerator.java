@@ -12,7 +12,7 @@ public class RowGenerator implements RowGeneratorImpl{
 
 	public RowGenerator(String tableName) throws FileNotFoundException{
 		this.tableName=tableName;
-		this.raf = new RandomAccessFile(GetTableDetails.dataPath+"\\"+tableName+".txt", "rw");
+		this.raf = FileUtil.getRandomAccessInstance(tableName);
 		this.columnVsSize = GetTableDetails.tableVsSize.get(tableName);
 		this.tablesVsFieldDetails = GetTableDetails.tablesVsFieldDetails.get(tableName);
 		this.total_row_size=columnVsSize.get("Total_Row_Size")+3;
@@ -56,13 +56,13 @@ public class RowGenerator implements RowGeneratorImpl{
 
 
 	@Override
-	public boolean haxNext(){
+	public boolean hasNext(){
 		try{
-
+			System.out.println(new String(buffer));
 			raf.seek(current_row_no);
 			Arrays.fill(buffer, (byte)0);
 			raf.readFully(buffer);
-
+			
 			//Ignoring rows that starts with '0'
 			while(buffer[0]!=1){
 				current_row_no+=total_row_size;
@@ -71,17 +71,20 @@ public class RowGenerator implements RowGeneratorImpl{
 				raf.readFully(buffer);
 			}
       		return true;
-	   	} catch(IOException | EOFException e){
-	      	System.out.println(e);
-	   	}
+	   	} catch(EOFException e){
+	      	System.out.println("here "+e);
+	   	}catch(IOException e){
+			System.out.println(e);
+		}
 		finally{
 			try {
+				FileUtil.releaseFile();
 				raf.close();
 			}
 			catch(IOException e){
 				e.printStackTrace();
 			}
-			FIleUtil.releaseFile();
+			FileUtil.releaseFile();
 		}
 	   	return false;
 	}

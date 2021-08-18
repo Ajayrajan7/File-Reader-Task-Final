@@ -34,8 +34,8 @@ class FileDeleteUtil {
         bwOut = new BufferedWriter(outputFileWriter);
         String line = null;
         while ((line = brIn.readLine()) != null)
-        if(line.substring(0)!="0")
-        bwOut.write(line);
+            if(line.substring(0).equals("0"))
+                bwOut.write(line);
     }
     catch(IOException e){
         throw new IOException("Cannot Detete Lines in the file");

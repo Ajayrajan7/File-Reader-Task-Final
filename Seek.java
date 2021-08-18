@@ -5,22 +5,22 @@ public class Seek {
       RandomAccessFile raf = null;
       RandomAccessFile raf2 = null;
       RandomAccessFile raf3 = null;
-      raf = new RandomAccessFile("C:/Users/AjaySandhya/Desktop/file task/File DB3/data/sample1.txt", "rw");
+      raf = new RandomAccessFile("C:/Users/AjaySandhya/Desktop/file task/File DB3/data/users.txt", "rw");
       raf2 = new RandomAccessFile("C:/Users/AjaySandhya/Desktop/file task/File DB3/data/sample1.txt", "rw");
       raf3 = new RandomAccessFile("C:/Users/AjaySandhya/Desktop/file task/File DB3/data/sample1.txt", "rw");
 
 
-      byte[] buffer = new byte[11]; /// 10 chars + 1 new line
+      byte[] buffer = new byte[100]; /// 10 chars + 1 new line
       // raf.readFully(buffer);
       // System.out.print(new String(buffer));
       String d="8";
       raf.seek(0);
-      raf.write(d.getBytes());
-      raf.write(d.getBytes());
-      raf.write(d.getBytes());
-      raf.write(d.getBytes());
-      raf.write(d.getBytes());
-      raf.seek(0);
+      // raf.write(d.getBytes());
+      // raf.write(d.getBytes());
+      // raf.write(d.getBytes());
+      // raf.write(d.getBytes());
+      // raf.write(d.getBytes());
+      // raf.seek(0);
       raf.readFully(buffer);
       System.out.println(new String(buffer));
       raf.close();

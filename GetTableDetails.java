@@ -8,8 +8,8 @@ public class GetTableDetails {
     static String dataPath="";
     
     public static void initialize(String path) throws IOException{
-        Properties props = parseProps("C:\\Users\\AjaySandhya\\Desktop\\File DB\\conf\\Tables.props");
-        Properties props2 = parseProps("C:\\Users\\AjaySandhya\\Desktop\\File DB\\conf\\dataconfig.props");
+        Properties props = parseProps("C:\\Users\\AjaySandhya\\Desktop\\file task\\File DB3\\conf\\Tables.props");
+        Properties props2 = parseProps("C:\\Users\\AjaySandhya\\Desktop\\file task\\File DB3\\conf\\dataconfig.props");
         dataPath = props2.getProperty("DataLocation");
         createTablesVsFields(props);
     }
@@ -34,13 +34,13 @@ public class GetTableDetails {
         }
     }
     private static void createPropsFileForDeletionTracking(String key){
-        File f = new File("C:\\Users\\AjaySandhya\\Desktop\\File DB\\config\\"+key+"."+props);
+        File f = new File("C:\\Users\\AjaySandhya\\Desktop\\file task\\File DB3\\conf\\"+key+".props");
         if(!f.exists()){
             try{
                 f.createNewFile();
                 Properties p = new Properties();
                 p.setProperty(key,"0");
-                p.store(new FileOutputStream("C:\\Users\\AjaySandhya\\Desktop\\File DB\\config\\"+key+"."+props),"Props file for tracking delete rows");
+                p.store(new FileOutputStream("C:\\Users\\AjaySandhya\\Desktop\\file task\\File DB3\\conf\\"+key+".props"),"Props file for tracking delete rows");
                 System.out.println("New file is for deletion tracking");
             }catch(Exception e){
                 System.out.println(e);
@@ -50,7 +50,7 @@ public class GetTableDetails {
         }
     }
 
-    public static LinkedHashMap<String,Class> getFieldVsTypes(String tableName){
+    public static LinkedHashMap<String,Types> getFieldVsTypes(String tableName){
         return tablesVsFieldDetails.get(tableName);
     }
 
@@ -103,25 +103,31 @@ public class GetTableDetails {
                 }
             }  
         }
-        fieldVsSize("Total_Row_Size",total_size);
+        fieldVsSize.put("Total_Row_Size",total_size);
         return fieldVsSize;
     }
 
     private static Integer getSizeForType(String str) throws ClassNotFoundException{
         String Capitalized = str.toLowerCase().substring(0, 1).toUpperCase() + str.substring(1);
         if(Capitalized.equals("String")){
-            return 1000;
+            // return 1000;
+            return 30;
         }else if(Capitalized.equals("Double")){
-            return 309;
+            // return 309;
+            return 20;
         }else if(Capitalized.equals("Float")){
-            return 39;
+            // return 39;
+            return 15;
         }else if(Capitalized.equals("Integer")){
+            // return 10;
             return 10;
         }else if(Capitalized.equals("Long")){
-            return 19;
+            // return 19;
+            return 16;
         }
+        return null;
     }
-    private Types Class getClassName(String str) throws ClassNotFoundException{
+    private static Types getClassName(String str) throws ClassNotFoundException{
         // String Capitalized = str.toLowerCase().substring(0, 1).toUpperCase() + str.substring(1);
         String dataTypeName = str.toUpperCase();
         if(dataTypeName.equals("INTEGER")){
