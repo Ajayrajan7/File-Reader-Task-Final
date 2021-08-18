@@ -68,7 +68,7 @@ public class RowGenerator implements RowGeneratorImpl{
 				raf.read(buffer);
 			}
       		return true;
-	   	} catch(){
+	   	} catch(Exception e){
 	      	System.out.println(e);
 	   	}
 		finally{

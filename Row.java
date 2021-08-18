@@ -2,10 +2,10 @@ import java.util.LinkedHashMap;
 
 public class Row {
     //Make the below fields private and make getters and setters.
-    String tableName;
-    int seekPos;
-    int rowLength;
-    LinkedHashMap<String,Object> rowDetails;
+    private String tableName;
+    private int seekPos;
+    private int rowLength;
+    private LinkedHashMap<String,Object> rowDetails;
 
     public void setSeekPos(int seekPos){
         this.seekPos=seekPos;

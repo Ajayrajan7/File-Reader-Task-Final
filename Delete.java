@@ -43,7 +43,7 @@ public class Delete{
    private boolean deleteRowHelper(Row r){
         RandomAccessFile file = new RandomAccessFile(dataFilePath, "rw");  
         file.seek(r.getSeekPos());  
-        file.write(0);  
+        file.write("0".getBytes());  
         file.close();
         zeroCount++;
         Properties p = new Properties();
