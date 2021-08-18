@@ -29,7 +29,7 @@ public class Select {
         while(rowGen.hasNext()){
             this.r = rowGen.next();
             ReducerUtil reducerUtil = new ReducerUtil();
-            reducerUtil.initialize(r,criteria.TOP)
+            reducerUtil.initialize(r,criteria.getTop());
             if(reducerUtil.parseAllCriterasAndReturnFinalBoolean()){
                 results.add(r);
             }
@@ -73,6 +73,10 @@ class Criteria{
         if(!SWITCH){
             throw new IllegalStateException("Criteria <"+caller+"> is called before where conditon");
         }
+    }
+
+    public List<WrappedCondition> getTop(){
+        return TOP;
     }
 
 
@@ -124,8 +128,8 @@ class ReducerUtil {
     private  int POSITION = 0;
 
     public  void initialize(Row row, List<WrappedCondition> TOP){
-        ReducerUtil.row = row;
-        ReducerUtil.TOP = TOP;
+        this.row = row;
+        this.TOP = TOP;
         LHS = true;
     }
 
@@ -140,7 +144,7 @@ class ReducerUtil {
  
      public  boolean reduce(boolean LHS,WrappedCondition RHS){
          final String USERKEY = RHS.getExpression().getLHSKEY();
-         final boolean RHSSTATUS = RHS.getExpression().evaluate(row.getColumn(USERKEY));
+         final boolean RHSSTATUS = RHS.getExpression().evaluate((Comparable)row.getColumn(USERKEY));
          switch(RHS.getExpressionName()){
             case AND :
                  return LHS && RHSSTATUS;
@@ -150,10 +154,6 @@ class ReducerUtil {
                  return false;
          }
      }
-    public  void reset(){
-        LHS = true;
-        row = null;
-    }
 }
 
 
