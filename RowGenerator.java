@@ -58,17 +58,20 @@ public class RowGenerator implements RowGeneratorImpl{
 	@Override
 	public boolean haxNext(){
 		try{
+
 			raf.seek(current_row_no);
-			raf.read(buffer);
+			Arrays.fill(buffer, (byte)0);
+			raf.readFully(buffer);
 
 			//Ignoring rows that starts with '0'
 			while(buffer[0]!=1){
 				current_row_no+=total_row_size;
 				raf.seek(current_row_no);
-				raf.read(buffer);
+				Arrays.fill(buffer, (byte)0);
+				raf.readFully(buffer);
 			}
       		return true;
-	   	} catch(Exception e){
+	   	} catch(EOFException e){
 	      	System.out.println(e);
 	   	}
 		finally{

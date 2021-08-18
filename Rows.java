@@ -1,13 +1,13 @@
 import java.util.*;
 import java.io.*;
 public class Rows{
-	private  String fileName;
+   private  String fileName;
    private Set<String> Fields;
    private List<LinkedHashMap<String,Object>> OrderedRows = new ArrayList<>();
 
 
    public Rows(String tableName,final List<HashMap<String,Object>> rowEntries) throws IllegalArgumentException {
-       this.fileName = tableName+".txt";
+       this.fileName = tableName;
        for(HashMap<String,Object> map:rowEntries){
        		checkOrderAndArrangeIfNot(tableName,map);	
        }
@@ -23,7 +23,7 @@ public class Rows{
     		for(LinkedHashMap<String,Object> map:OrderedRows){
 				out.print(1);
     			for(Map.Entry<String,Object> entry:map.entrySet()){
-    				out.print(entry.getValue());
+    				out.print(padData(entry.getKey(),entry.getValue()));
     			}
     			out.print("\n");
     		} 
@@ -35,6 +35,11 @@ public class Rows{
     	}
         return 0; 
     }
+
+	private static String padData(String key,Object value){
+		int size = (GetTableDetails.tableVsSize.get(fileName)).get(key);
+		return String.format("%"+(-size)+"s",value.toString()).replace(' ',' ');
+	}
 
     private void  checkOrderAndArrangeIfNot(String tableName,HashMap<String,Object> map){
     	LinkedHashMap<String,Object> finalOrder = new LinkedHashMap<>();
