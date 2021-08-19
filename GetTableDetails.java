@@ -34,7 +34,7 @@ public class GetTableDetails {
                 System.out.println(e);
             }
         }else{
-            System.out.println("File exists already");
+            // System.out.println("File exists already");
         }
     }
     private static void createPropsFileForDeletionTracking(String key){
@@ -50,7 +50,7 @@ public class GetTableDetails {
                 System.out.println(e);
             }
         }else{
-            System.out.println("File exists already");
+            // System.out.println("File exists already");
         }
     }
 

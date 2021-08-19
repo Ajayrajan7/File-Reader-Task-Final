@@ -1,6 +1,5 @@
 import java.util.*;
 
-
 class MainCode{
 	public static void main(String[] args){
 		try{
@@ -17,25 +16,54 @@ class MainCode{
 			// Rows r = new Rows("users",list);
 			// r.addToTable();
 
-			Select s = new Select("users");
-			List<Row> results=s.executeQuery();
-			System.out.println(results);
+			// getAllRecords("users");
 
+			// Select s = new Select("users");
 			
-			// data.clear();
-			// list.remove(0);
-			
-			// data.put("user_id",1);
-			// data.put("fileName","today_log.log");
-			// list.add(data);
-			// r=new Rows("log_details",list);
-			// r.addToTable();
+			// Criteria c = s.getCriteria().where("user_id",Operator.EQU,(Integer)1).and("email",Operator.EQU,"ajay@gmail.com");
 
-			// Select_ select = new Select_();
-			// LinkedHashMap<String,Object> data=select.getData("users","user_id","name","email");
-			// System.out.println(data);
+			// List<Row> results=s.executeQuery();
+
+			// System.out.println("\nResults:");
+			// int i=0;	
+			// for(Row r:results){
+			// 	System.out.println("\nRecord "+i);
+			// 	System.out.println("user_id: "+r.getInt("user_id"));
+			// 	System.out.println("name: "+r.getString("name"));
+			// 	System.out.println("email: "+r.getString("email"));
+			// 	i++;
+			// }
+
+			Update u = new Update("users");
+			u.set("name","Chella");
+			u.set("email","chella@gmail.com");
+
+			Criteria cu = u.getCriteria().where("user_id",Operator.EQU,(Integer)2);
+			u.executeQuery();
+			getAllRecords("users");
+
 		}catch(Exception e){
 			System.out.println(e);
 		}
+	}
+
+	public static void getAllRecords(String tableName){
+		try{
+			Select s = new Select("users");
+			List<Row> results=s.executeQuery();
+			
+			int i=0;
+			System.out.println("\nResults:");
+			for(Row r:results){
+				System.out.println("\nRecord "+i);
+				System.out.println("user_id: "+r.getInt("user_id"));
+				System.out.println("name: "+r.getString("name"));
+				System.out.println("email: "+r.getString("email"));
+				i++;
+			}
+		}catch(Exception e){
+			System.out.println(e);
+		}
+
 	}
 }

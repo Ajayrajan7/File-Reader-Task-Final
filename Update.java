@@ -56,7 +56,7 @@ public class Update{
             raf=FileUtil.getRandomAccessInstance(tablename);
             raf.seek(r.getSeekPos());
             for(String key:rowDetails.keySet()){
-                raf.write(Rows.padData(key,rowDetails.get(key)).getBytes());
+                raf.write((Rows.padData(tablename,key,rowDetails.get(key))).getBytes());
             }
             return true;
         }

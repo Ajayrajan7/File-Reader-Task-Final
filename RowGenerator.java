@@ -26,29 +26,35 @@ public class RowGenerator implements RowGeneratorImpl{
 			Row row = new Row(tableName);
 			int ptr=1;
 			//Iterating each column in the buffer.
-			for(String key:columnVsSize.keySet()){
-				String data = new String(buffer,ptr,ptr+columnVsSize.get(key));
+			for(String key:tablesVsFieldDetails.keySet()){
+				String data = (new String(buffer,ptr,columnVsSize.get(key)-1)).trim();
 				Types type = tablesVsFieldDetails.get(key);
-
+				// System.out.println(ptr+" "+columnVsSize.get(key));
+				// System.out.println(key+" "+data+" "+type);
 				//Finding the type of the current column and typecasting it to object type
 				switch(type){
-		             case INTEGER :
-		                   rowDetails.put(key,Integer.valueOf(data));
-		             case STRING :
+					case STRING :
 		                   rowDetails.put(key,data);
-		             case FLOAT :
+						   break;
+		            case INTEGER :
+		                   rowDetails.put(key,Integer.valueOf(data));
+						   break;	             
+					case FLOAT :
 		                   rowDetails.put(key,Float.valueOf(data));
-		             case DOUBLE :
+						   break;
+					case DOUBLE :
 		                   rowDetails.put(key,Double.valueOf(data));
-		             case LONG :
+						   break;
+					case LONG :
 		                   rowDetails.put(key,Long.valueOf(data));
-		             case BOOLEAN :
+						   break;
+					case BOOLEAN :
 		                   rowDetails.put(key,Boolean.valueOf(data));  
         		}
         		ptr+=columnVsSize.get(key);
 			}
 			row.setRowDetails(rowDetails);
-			row.setSeekPos(current_row_no);
+			row.setSeekPos(current_row_no+1);
 			row.setRowLength(total_row_size);
 			current_row_no+=total_row_size;
 			return row;
@@ -58,12 +64,11 @@ public class RowGenerator implements RowGeneratorImpl{
 	@Override
 	public boolean hasNext(){
 		try{
-			System.out.println(raf);
 			raf.seek(current_row_no);
 			Arrays.fill(buffer, (byte)0);
 			raf.readFully(buffer);
-			System.out.println("Buffer "+new String(buffer));
-			System.out.println("Buf[0] ="+(char)buffer[0]);
+			//System.out.println("Buffer "+new String(buffer));
+			// System.out.println("Buf[0] ="+(char)buffer[0]);
 			//Ignoring rows that starts with '0'
 			while(buffer[0]!=49){  // ascii code of 1 is 49 which is stored in file
 				current_row_no+=total_row_size;
@@ -73,19 +78,20 @@ public class RowGenerator implements RowGeneratorImpl{
 			}
       		return true;
 	   	} catch(EOFException e){
-	      	System.out.println("here "+e);
-	   	}catch(IOException e){
-			System.out.println(e);
-		}
-		finally{
+	      	System.out.println(e);
 			try {
 				FileUtil.releaseFile();
 				raf.close();
 			}
-			catch(IOException e){
-				e.printStackTrace();
+			catch(IOException ex){
+				ex.printStackTrace();
 			}
 			FileUtil.releaseFile();
+	   	}catch(IOException e){
+			System.out.println(e);
+		}
+		finally{
+			
 		}
 	   	return false;
 	}

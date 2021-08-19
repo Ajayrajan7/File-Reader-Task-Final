@@ -24,7 +24,7 @@ public class Rows{
     		for(LinkedHashMap<String,Object> map:OrderedRows){
 				out.print(1);
     			for(Map.Entry<String,Object> entry:map.entrySet()){
-    				out.print(padData(entry.getKey(),entry.getValue()));
+    				out.print(padData(fileName,entry.getKey(),entry.getValue()));
     			}
     			out.print("\n");
     		} 
@@ -37,8 +37,8 @@ public class Rows{
         return 0; 
     }
 
-	 static String padData(String key,Object value){
-		int size = (GetTableDetails.tableVsSize.get(fileName)).get(key);
+	 static String padData(String tablename,String key,Object value){
+		int size = (GetTableDetails.tableVsSize.get(tablename)).get(key);
 		return String.format("%"+(-size)+"s",value.toString()).replace(' ',' ');
 	}
 

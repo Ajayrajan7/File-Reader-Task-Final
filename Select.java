@@ -14,7 +14,9 @@ public class Select {
        this.columns = columns;
        return criteria;
    }
-   
+   public Criteria getCriteria(){
+       return criteria;
+   }
    /**
     * Iterate over the columns from the GetTableDetails cache and throw if columns mismatched in given columns
     * @param columns
@@ -30,6 +32,7 @@ public class Select {
             List<Row> results = new ArrayList<>();
             while(rowGen.hasNext()){
                 this.r = rowGen.next();
+                // System.out.println(r.getRowDetails());
                 ReducerUtil reducerUtil = new ReducerUtil();
                 reducerUtil.initialize(r,criteria.getTop());
                 if(reducerUtil.parseAllCriterasAndReturnFinalBoolean()){
@@ -51,7 +54,7 @@ class Criteria{
     private List<WrappedCondition> TOP = new LinkedList<>();
     private boolean SWITCH = false;
     
-    public Criteria where(String key,Operator operator,Comparable<Object> value) throws IllegalStateException{
+    public Criteria where(String key,Operator operator,Comparable value) throws IllegalStateException{
         if(SWITCH) throw new IllegalStateException("Criteria  <where> is called more than once");
         SWITCH = true;
         TOP.add(new WrappedCondition(
@@ -60,7 +63,7 @@ class Criteria{
         return this;
     }
 
-    public Criteria and(String key,Operator operator,Comparable<Object> value) throws IllegalStateException{
+    public Criteria and(String key,Operator operator,Comparable value) throws IllegalStateException{
         checkSwitchAndThrowException("and");
         TOP.add(new WrappedCondition(
             new Expression(operator,key,value),ExpressionName.AND
@@ -143,8 +146,9 @@ class ReducerUtil {
 
     public  boolean parseAllCriterasAndReturnFinalBoolean(){
         if(TOP.size()==0) return LHS;
-        while((POSITION+1) != TOP.size()){
+        while((POSITION) != TOP.size()){
             LHS = reduce(LHS,TOP.get(POSITION));
+            POSITION++;
         }
         return LHS;
         
