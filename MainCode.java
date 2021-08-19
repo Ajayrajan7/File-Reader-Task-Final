@@ -7,7 +7,6 @@ public class MainCode{
 
 			// insertRecords("users");
 			// deleteAllRecords("users");
-			FileDeleteUtil.deleteLines("users");
 			getAllRecords("users");
 			// getAllRecordsWithQuery("users");
 			

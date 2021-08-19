@@ -79,4 +79,3 @@ enum Operator {
     LTE,
     EQU
 }
-// Select s = new Select("User").columns("Id","Name","Password").where("Id",Operator.EQ,20).and("Name",Operator.EQ,"Ajay").or("Name",Operator.EQ,"Chella");
