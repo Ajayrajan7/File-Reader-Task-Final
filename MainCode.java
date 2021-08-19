@@ -13,7 +13,7 @@ public class MainCode{
 			// data.put("email","ajay@gmail.com");
 			// data.put("name","Ajay Rajan");
 			// list.add(data);
-			// Rows r = new Rows("users",list);
+			// Insert r = new Insert("users",list);
 			// r.addToTable();
 
 			

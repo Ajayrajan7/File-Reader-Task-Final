@@ -1,12 +1,12 @@
 import java.util.*;
 import java.io.*;
-public class Rows{
+public class Insert{
    private static String fileName;
    private Set<String> Fields;
    private List<LinkedHashMap<String,Object>> OrderedRows = new ArrayList<>();
 
 
-   public Rows(String tableName,final List<HashMap<String,Object>> rowEntries) throws IllegalArgumentException {
+   public Insert(String tableName,final List<HashMap<String,Object>> rowEntries) throws IllegalArgumentException {
        this.fileName = tableName;
        for(HashMap<String,Object> map:rowEntries){
        		checkOrderAndArrangeIfNot(tableName,map);	
