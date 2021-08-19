@@ -15,7 +15,7 @@ public class Rows{
     }
 
     public int addToTable() throws Exception{
-    	String path=GetTableDetails.dataPath+"\\"+fileName+".txt";
+    	String path=GetTableDetails.dataPath+File.separator+fileName+".txt";
     	FileWriter fw = new FileWriter(path, true);
     	try{
     		BufferedWriter bw = new BufferedWriter(fw);

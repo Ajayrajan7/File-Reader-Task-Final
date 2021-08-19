@@ -4,7 +4,7 @@ public class Select_{
 
 	public List<LinkedHashMap<String,Object>> getData(String tableName, String ...args){
 
-		// String path=GetTableDetails.dataPath+"\\"+tableName+".txt";
+		// String path=GetTableDetails.dataPath+File.separator+tableName+".txt";
 		// List<LinkedHashMap<String,Object>> realOrder = GetTableDetails.tablesVsFieldDetails.get(tableName);
 
 		// try{

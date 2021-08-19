@@ -13,7 +13,7 @@ public class Delete{
    public Delete(String tablename){
         this.tablename = tablename;
         // this.dataFilePath = GetTableDetails.dataPath;
-        this.filePath = GetTableDetails.confPath+"\\"+tablename+".props";
+        this.filePath = GetTableDetails.confPath+File.separator+tablename+".props";
         p=new Properties();
         try{
             p.load(new FileReader(filePath));
@@ -77,7 +77,4 @@ public class Delete{
        }
     return false;
    }
-}https://jaychapel.medium.com/aws-reserved-instances-versus-on-demand-which-is-b
-etter-e7f77f1f9582 
-https://www.quora.com/What-is-the-difference-between-no-upfront-reserved-instanc
-e-and-on-demand-instance 
+}

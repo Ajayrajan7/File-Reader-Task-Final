@@ -5,7 +5,7 @@ public class FileUtil {
     private static AtomicInteger noOfDescriptors= new AtomicInteger();
     public static RandomAccessFile getRandomAccessInstance(String tableName) throws FileNotFoundException{
         noOfDescriptors.incrementAndGet();
-       return new RandomAccessFile(GetTableDetails.dataPath+"\\"+tableName+".txt", "rw");
+       return new RandomAccessFile(GetTableDetails.dataPath+File.separator+tableName+".txt", "rw");
     }
 
     public static void releaseFile(){
@@ -26,11 +26,11 @@ class FileDeleteUtil {
     FileWriter  outputFileWriter = null;
     BufferedWriter bwOut = null;
     String filenameTemp = tableName+Long.toHexString(Double.doubleToLongBits(Math.random()));
-    String origFile = GetTableDetails.dataPath+"\\"+tableName+".txt";
+    String origFile = GetTableDetails.dataPath+File.separator+tableName+".txt";
     try{
         inputFileReader = new FileReader(origFile);
         brIn = new BufferedReader(inputFileReader);
-        outputFileWriter = new FileWriter(GetTableDetails.dataPath+"\\"+filenameTemp+".txt");
+        outputFileWriter = new FileWriter(GetTableDetails.dataPath+File.separator+filenameTemp+".txt");
         bwOut = new BufferedWriter(outputFileWriter);
         String line = null;
         while ((line = brIn.readLine()) != null)
