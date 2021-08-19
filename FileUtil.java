@@ -51,27 +51,17 @@ class FileDeleteUtil {
         System.out.println("Null pointer Exception "+line);
     }
     finally{
+        inputFileReader.close();
+        outputFileWriter.close();
+        
         //rename old file
         File file1 = new File(origFile);
-        File file2 = new File(GetTableDetails.dataPath+File.separator+"temp-"+tableName+".txt");
-        System.out.println(file2.exists());
-        System.out.println(file1.renameTo(file2));
-       
-        //rename current file
-        File file3 = new File(GetTableDetails.dataPath+File.separator+filenameTemp+".txt");
-        File file4 = new File(origFile);
-        file3.renameTo(file4);
+        System.out.println(file1.delete());
 
-        file2.delete();
-
-        System.out.println("Done");
-        try{
-            inputFileReader.close();
-            outputFileWriter.close();
-        }
-        catch(IOException e){
-            e.printStackTrace();
-        }
+        File tempFile = new File(GetTableDetails.dataPath+File.separator+filenameTemp+".txt");
+        File newName = new File(GetTableDetails.dataPath+File.separator+tableName+".txt");
+        tempFile.renameTo(newName);
+        
     }
     return 0;
    }
