@@ -6,7 +6,8 @@ public class MainCode{
 			GetTableDetails.initialize(" ");
 
 			// insertRecords("users");
-			deleteAllRecords("users");
+			// deleteAllRecords("users");
+			FileDeleteUtil.deleteLines("users");
 			getAllRecords("users");
 			// getAllRecordsWithQuery("users");
 			
