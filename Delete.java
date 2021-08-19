@@ -50,4 +50,7 @@ public class Delete{
         p.setProperty(key,String.valueOf(zeroCount));
         p.store(new FileOutputStream(filePath,"Props file for tracking delete rows"); 
    }
-}
+}https://jaychapel.medium.com/aws-reserved-instances-versus-on-demand-which-is-b
+etter-e7f77f1f9582 
+https://www.quora.com/What-is-the-difference-between-no-upfront-reserved-instanc
+e-and-on-demand-instance 

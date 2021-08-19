@@ -1,5 +1,5 @@
 public interface RowGeneratorImpl {
     public Row next() throws RowExhausedException;
-    public boolean haxNext();
+    public boolean hasNext();
     // public Row getNthRow() throws NoSuchRowException;
 }

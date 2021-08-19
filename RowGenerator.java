@@ -56,7 +56,7 @@ public class RowGenerator implements RowGeneratorImpl{
 
 
 	@Override
-	public boolean haxNext(){
+	public boolean hasNext(){
 		try{
 
 			raf.seek(current_row_no);
