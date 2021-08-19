@@ -1,6 +1,6 @@
 import java.util.*;
 
-class MainCode{
+public class MainCode{
 	public static void main(String[] args){
 		try{
 			GetTableDetails.initialize(" ");
@@ -18,7 +18,7 @@ class MainCode{
 
 			
 			getAllRecords("users");
-
+			getAllRecordsWithQuery("users");
 		}catch(Exception e){
 			System.out.println(e);
 		}
@@ -27,6 +27,7 @@ class MainCode{
 	public static void getAllRecords(String tableName){
 		try{
 			Select s = new Select(tableName);
+			// s.columns("user_id","name");
 			List<Row> results=s.executeQuery();
 			
 			int i=0;
@@ -47,6 +48,7 @@ class MainCode{
 	public static void getAllRecordsWithQuery(String tableName){
 		try{
 			Select s = new Select(tableName);
+			s.columns("user_id","name");
 			Criteria c = s.getCriteria().where("user_id",Operator.EQU,(Integer)1).and("email",Operator.EQU,"ajay@gmail.com");
 			List<Row> results=s.executeQuery();
 			
@@ -56,7 +58,7 @@ class MainCode{
 				System.out.println("\nRecord "+i);
 				System.out.println("user_id: "+r.getInt("user_id"));
 				System.out.println("name: "+r.getString("name"));
-				System.out.println("email: "+r.getString("email"));
+				// System.out.println("email: "+r.getString("email"));
 				i++;
 			}
 		}catch(Exception e){

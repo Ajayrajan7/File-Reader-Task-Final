@@ -22,7 +22,7 @@ class Criteria{
 
     }
 
-    public Criteria or(String key,Operator operator,Comparable<Object> value) throws IllegalStateException{
+    public Criteria or(String key,Operator operator,Comparable value) throws IllegalStateException{
         TOP.add(new WrappedCondition(
             new Expression(operator,key,value),ExpressionName.OR
         ));

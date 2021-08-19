@@ -4,14 +4,18 @@ public class Select {
    private Criteria criteria = new Criteria();
    private Row r;
    private String[] columns;
-   private String tablename ;
+   private String tablename;
+   private Set<String> columnsSet;
+   private Set<String> actualCols;
    public Select(String tablename){
           this.tablename = tablename;
    }
 
    public void columns(String... columns) throws ColumnNotFoundException{
-       checkIfColumnsAreValid(columns);
+    //    checkIfColumnsAreValid(columns);
        this.columns = columns;
+       this.columnsSet = new LinkedHashSet<>(Arrays.asList(columns));
+       this.actualCols = GetTableDetails.tablesVsFieldDetails.get(tablename).keySet();
    }
    public Criteria getCriteria(){
        return criteria;
@@ -21,9 +25,9 @@ public class Select {
     * @param columns
     * @throws ColumnNotFoundException
     */ 
-   private  void checkIfColumnsAreValid(String[] columns) throws ColumnNotFoundException {
+//    private  void checkIfColumnsAreValid(String[] columns) throws ColumnNotFoundException {
        
-   }
+//    }
 
    public List<Row> executeQuery(){
        try{
@@ -31,15 +35,15 @@ public class Select {
             List<Row> results = new ArrayList<>();
             while(rowGen.hasNext()){
                 this.r = rowGen.next();
-                // System.out.println(r.getRowDetails());
                 ReducerUtil reducerUtil = new ReducerUtil();
                 reducerUtil.initialize(r,criteria.getTop());
                 if(reducerUtil.parseAllCriterasAndReturnFinalBoolean()){
                     if(columns==null || columns.length==0)
                         results.add(r);
-                    // else{
-                    //     sendOnlyRequestCols(columns);
-                    // }
+                    else{
+                        sendOnlyRequestedCols();
+                        results.add(r);
+                    }
                 }
             }   
             return results;
@@ -49,6 +53,17 @@ public class Select {
            System.out.println(e);
        }
        return null;
+   }
+
+   public void sendOnlyRequestedCols(){
+       try{
+           for(String col:actualCols){
+               if(!columnsSet.contains(col))
+                    r.getRowDetails().remove(col);
+           }
+       }catch(Exception e){
+           System.out.println(e);
+       }
    }
 }
 
