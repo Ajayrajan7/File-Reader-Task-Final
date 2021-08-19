@@ -1,1 +1,0 @@
-1 today_log.log 

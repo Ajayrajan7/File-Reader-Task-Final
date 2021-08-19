@@ -1,3 +1,5 @@
+import java.util.*;
+import java.io.*;
 public class Update{
    private Criteria criteria = new Criteria();
    private Row r;
@@ -16,20 +18,29 @@ public class Update{
    }
 
    public boolean executeQuery(){
-        RowGenerator rowGen = new RowGenerator(tablename);
-        while(rowGen.hasNext()){
-            this.r = rowGen.next();
-            ReducerUtil reducerUtil = new ReducerUtil();
-            reducerUtil.initialize(r,criteria.TOP);
-            if(reducerUtil.parseAllCriterasAndReturnFinalBoolean()){
-                if(updateCurrentRow(r)){
-                    continue;
-                }else{
-                    //to handle failure case
+       try{
+            RowGenerator rowGen = new RowGenerator(tablename);
+            while(rowGen.hasNext()){
+                this.r = rowGen.next();
+                ReducerUtil reducerUtil = new ReducerUtil();
+                reducerUtil.initialize(r,criteria.getTop());
+                if(reducerUtil.parseAllCriterasAndReturnFinalBoolean()){
+                    if(updateCurrentRow(r)){
+                        continue;
+                    }else{
+                        //to handle failure case
+                        return false;
+                    }
                 }
             }
-        }
-        return results;
+            return true;
+       }catch(RowExhausedException e){
+           System.out.println(e);
+       }catch(FileNotFoundException e){
+           System.out.println(e);
+       }
+       return false;
+        
    }
 
    private boolean updateCurrentRow(Row r){
@@ -42,18 +53,19 @@ public class Update{
        }
        RandomAccessFile raf=null;
         try{
-            raf=new RandomAccessFile(GetTableDetails.dataPath+"\\"+tableName+".txt", "rw");
+            raf=FileUtil.getRandomAccessInstance(tablename);
             raf.seek(r.getSeekPos());
             for(String key:rowDetails.keySet()){
-                raf.write(rowDetails.get(key).getBytes());
+                raf.write(Rows.padData(key,rowDetails.get(key)).getBytes());
             }
+            return true;
         }
-        return true;
         catch(Exception e){
             System.out.println(e);
         }
         finally{
             try {
+                FileUtil.releaseFile();
                 raf.close();
             }
             catch(IOException e){

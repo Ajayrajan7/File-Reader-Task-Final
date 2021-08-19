@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 public class Rows{
-   private  String fileName;
+   private static String fileName;
    private Set<String> Fields;
    private List<LinkedHashMap<String,Object>> OrderedRows = new ArrayList<>();
 
@@ -11,15 +11,16 @@ public class Rows{
        for(HashMap<String,Object> map:rowEntries){
        		checkOrderAndArrangeIfNot(tableName,map);	
        }
-       System.out.println(OrderedRows);
+    //    System.out.println(OrderedRows);
     }
 
     public int addToTable() throws Exception{
-    	String path=GetTableDetails.dataPath+"\\"+fileName;
+    	String path=GetTableDetails.dataPath+"\\"+fileName+".txt";
     	FileWriter fw = new FileWriter(path, true);
     	try{
     		BufferedWriter bw = new BufferedWriter(fw);
     		PrintWriter out = new PrintWriter(bw);
+
     		for(LinkedHashMap<String,Object> map:OrderedRows){
 				out.print(1);
     			for(Map.Entry<String,Object> entry:map.entrySet()){
@@ -36,16 +37,16 @@ public class Rows{
         return 0; 
     }
 
-	private static String padData(String key,Object value){
+	 static String padData(String key,Object value){
 		int size = (GetTableDetails.tableVsSize.get(fileName)).get(key);
 		return String.format("%"+(-size)+"s",value.toString()).replace(' ',' ');
 	}
 
     private void  checkOrderAndArrangeIfNot(String tableName,HashMap<String,Object> map){
     	LinkedHashMap<String,Object> finalOrder = new LinkedHashMap<>();
-    	LinkedHashMap<String,Class> realOrder = GetTableDetails.tablesVsFieldDetails.get(tableName);
+    	LinkedHashMap<String,Types> realOrder = GetTableDetails.tablesVsFieldDetails.get(tableName);
 
-    	for(Map.Entry<String,Class> entry:realOrder.entrySet()){
+    	for(Map.Entry<String,Types> entry:realOrder.entrySet()){
     		if(map.get(entry.getKey())!=null){
     			// if(entry.getValue().toString().equals("class java.lang.String")){
 	    		// 	String val = (String)map.get(entry.getKey());

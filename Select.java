@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.*;
 public class Select {
    private Criteria criteria = new Criteria();
    private Row r;
@@ -24,17 +25,24 @@ public class Select {
    }
 
    public List<Row> executeQuery(){
-        RowGenerator rowGen = new RowGenerator(tablename);
-        List<Row> results = new ArrayList<>();
-        while(rowGen.hasNext()){
-            this.r = rowGen.next();
-            ReducerUtil reducerUtil = new ReducerUtil();
-            reducerUtil.initialize(r,criteria.getTop());
-            if(reducerUtil.parseAllCriterasAndReturnFinalBoolean()){
-                results.add(r);
-            }
-        }
-        return results;
+       try{
+            RowGenerator rowGen = new RowGenerator(tablename);
+            List<Row> results = new ArrayList<>();
+            while(rowGen.hasNext()){
+                this.r = rowGen.next();
+                ReducerUtil reducerUtil = new ReducerUtil();
+                reducerUtil.initialize(r,criteria.getTop());
+                if(reducerUtil.parseAllCriterasAndReturnFinalBoolean()){
+                    results.add(r);
+                }
+            }   
+            return results;
+       }catch(RowExhausedException e){
+           System.out.println(e);
+       }catch(FileNotFoundException e){
+           System.out.println(e);
+       }
+       return null;
    }
 }
 
@@ -43,7 +51,7 @@ class Criteria{
     private List<WrappedCondition> TOP = new LinkedList<>();
     private boolean SWITCH = false;
     
-    public Criteria where(String key,Operator operator,Comparable value) throws IllegalStateException{
+    public Criteria where(String key,Operator operator,Comparable<Object> value) throws IllegalStateException{
         if(SWITCH) throw new IllegalStateException("Criteria  <where> is called more than once");
         SWITCH = true;
         TOP.add(new WrappedCondition(
@@ -52,7 +60,7 @@ class Criteria{
         return this;
     }
 
-    public Criteria and(String key,Operator operator,Comparable value) throws IllegalStateException{
+    public Criteria and(String key,Operator operator,Comparable<Object> value) throws IllegalStateException{
         checkSwitchAndThrowException("and");
         TOP.add(new WrappedCondition(
             new Expression(operator,key,value),ExpressionName.AND
@@ -61,7 +69,7 @@ class Criteria{
 
     }
 
-    public Criteria or(String key,Operator operator,Comparable value) throws IllegalStateException{
+    public Criteria or(String key,Operator operator,Comparable<Object> value) throws IllegalStateException{
         TOP.add(new WrappedCondition(
             new Expression(operator,key,value),ExpressionName.OR
         ));
@@ -85,9 +93,9 @@ class Criteria{
 class Expression{  
     private Operator operator; //"Id > 20"
     private String LHSKEY;
-    private Comparable LHS ;  // The value passed by the user during query construction
+    private Comparable<Object> LHS ;  // The value passed by the user during query construction
 
-    public Expression(Operator operator,String LHSKEY,Comparable LHS){
+    public Expression(Operator operator,String LHSKEY,Comparable<Object> LHS){
         this.operator = operator;
         this.LHS = LHS;
         this.LHSKEY = LHSKEY;
@@ -103,7 +111,7 @@ class Expression{
      * @param RHS The actual value from the Row Object
      * @return boolean
      */
-    public boolean evaluate(Comparable RHS) {
+    public boolean evaluate(Comparable<Object> RHS) {
          switch(operator){
              case GT :
                    return LHS.compareTo(RHS) == 1 ;
@@ -144,7 +152,7 @@ class ReducerUtil {
  
      public  boolean reduce(boolean LHS,WrappedCondition RHS){
          final String USERKEY = RHS.getExpression().getLHSKEY();
-         final boolean RHSSTATUS = RHS.getExpression().evaluate((Comparable)row.getColumn(USERKEY));
+         final boolean RHSSTATUS = RHS.getExpression().evaluate((Comparable<Object>)row.getColumn(USERKEY));
          switch(RHS.getExpressionName()){
             case AND :
                  return LHS && RHSSTATUS;
