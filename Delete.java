@@ -45,8 +45,9 @@ public class Delete{
                 }
             }
             //Threshold check for deleting rows starts with 0
-            if(zeroCount>1000){
+            if(zeroCount>2){
                 FileDeleteUtil.deleteLines(tablename);
+                setZeroCount(zeroCount);
             }
             return true;
        }catch(FileNotFoundException e){
@@ -59,18 +60,26 @@ public class Delete{
     return false;
         
    }
+   private void setZeroCount(int zeroCount){
+       try{
+            Properties p = new Properties();
+            p.setProperty(tablename,String.valueOf(zeroCount));
+            OutputStream output = new FileOutputStream(filePath);
+            p.store(output,null);
+       }catch(Exception e){
+           System.out.println(e);
+       }
+        
+   }
    private boolean deleteRowHelper(Row r){
        try{
            RandomAccessFile file = FileUtil.getRandomAccessInstance(tablename);  
-            file.seek(r.getSeekPos());  
+            file.seek(r.getSeekPos()-1);  
             file.write("0".getBytes());  
             FileUtil.releaseFile();
             file.close();
             zeroCount++;
-            Properties p = new Properties();
-            p.setProperty(tablename,String.valueOf(zeroCount));
-            OutputStream output = new FileOutputStream(filePath);
-            p.store(output,null); 
+            setZeroCount(zeroCount);
             return true;
        }catch(IOException e){
            System.out.println(e);

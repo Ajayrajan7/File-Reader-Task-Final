@@ -15,7 +15,7 @@ public class RowGenerator implements RowGeneratorImpl{
 		this.raf = FileUtil.getRandomAccessInstance(tableName);
 		this.columnVsSize = GetTableDetails.tableVsSize.get(tableName);
 		this.tablesVsFieldDetails = GetTableDetails.tablesVsFieldDetails.get(tableName);
-		this.total_row_size=columnVsSize.get("Total_Row_Size")+3;
+		this.total_row_size=columnVsSize.get("Total_Row_Size")+2;
 		this.buffer = new byte[total_row_size];
 	}
 
@@ -67,7 +67,7 @@ public class RowGenerator implements RowGeneratorImpl{
 			raf.seek(current_row_no);
 			Arrays.fill(buffer, (byte)0);
 			raf.readFully(buffer);
-			System.out.println("Buffer "+new String(buffer));
+			// System.out.println("Buffer "+new String(buffer));
 
 			// System.out.println("Buf[0] ="+(char)buffer[0]);
 			//Ignoring rows that starts with '0'
