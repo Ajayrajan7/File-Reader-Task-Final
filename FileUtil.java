@@ -21,24 +21,33 @@ public class FileUtil {
 
 class FileDeleteUtil {
    public static synchronized int deleteLines(String tableName) throws IOException{
+    System.out.println("Deleting");
     FileReader inputFileReader = null;
     BufferedReader brIn = null;
     FileWriter  outputFileWriter = null;
     BufferedWriter bwOut = null;
     String filenameTemp = tableName+Long.toHexString(Double.doubleToLongBits(Math.random()));
     String origFile = GetTableDetails.dataPath+File.separator+tableName+".txt";
+    String line = null;
     try{
         inputFileReader = new FileReader(origFile);
         brIn = new BufferedReader(inputFileReader);
         outputFileWriter = new FileWriter(GetTableDetails.dataPath+File.separator+filenameTemp+".txt");
         bwOut = new BufferedWriter(outputFileWriter);
-        String line = null;
-        while ((line = brIn.readLine()) != null)
-            if(line.substring(0).equals("0"))
-                bwOut.write(line);
+        while ((line = brIn.readLine()) != null){
+            if(line.charAt(0)!='0'){
+                System.out.println(line);
+                outputFileWriter.write(line);
+            }
+                
+        }
     }
     catch(IOException e){
         throw new IOException("Cannot Detete Lines in the file");
+    }
+
+    catch(NullPointerException e){
+        System.out.println("Null pointer Exception "+line);
     }
     finally{
         //rename old file
