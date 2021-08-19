@@ -5,20 +5,11 @@ public class MainCode{
 		try{
 			GetTableDetails.initialize(" ");
 
-			// List<HashMap<String,Object>> list = new ArrayList<>();
-			// HashMap<String,Object> data = new HashMap<>();
-			
-			// data.put("password","aja@123");
-			// data.put("user_id",1);
-			// data.put("email","ajay@gmail.com");
-			// data.put("name","Ajay Rajan");
-			// list.add(data);
-			// Insert r = new Insert("users",list);
-			// r.addToTable();
-
+			// insertRecords("users");
 			
 			getAllRecords("users");
-			getAllRecordsWithQuery("users");
+			// getAllRecordsWithQuery("users");
+			// deleteAllRecords("users");
 		}catch(Exception e){
 			System.out.println(e);
 		}
@@ -78,5 +69,42 @@ public class MainCode{
 		}catch(Exception e){
 			System.out.println(e);
 		}
+	}
+
+	public static void deleteAllRecords(String tablename){
+		try{
+			Delete d = new Delete(tablename);
+
+		}catch(Exception e){
+			System.out.println(e);
+		}
+	}
+
+	public static void insertRecords(String tablename){
+		try{
+			List<HashMap<String,Object>> list = new ArrayList<>();
+			HashMap<String,Object> data = new HashMap<>();
+			
+			data.put("password","temp2");
+			data.put("user_id",3);
+			data.put("email","temp2@gmail.com");
+			data.put("name","Testing2");
+			list.add(data);
+
+			// HashMap<String,Object> data2 = new HashMap<>();
+			
+			// data2.put("password","arun");
+			// data2.put("user_id",4);
+			// data2.put("email","arun@gmail.com");
+			// data2.put("name","Arun Kumar");
+			// list.add(data2);
+
+
+			Insert r = new Insert("users",list);
+			r.addToTable();
+		}catch(Exception e){
+			System.out.println(e);
+		}
+		
 	}
 }

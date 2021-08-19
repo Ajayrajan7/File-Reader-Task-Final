@@ -67,9 +67,12 @@ public class RowGenerator implements RowGeneratorImpl{
 			raf.seek(current_row_no);
 			Arrays.fill(buffer, (byte)0);
 			raf.readFully(buffer);
-			//System.out.println("Buffer "+new String(buffer));
+			System.out.println("Buffer "+new String(buffer));
+
 			// System.out.println("Buf[0] ="+(char)buffer[0]);
 			//Ignoring rows that starts with '0'
+
+			
 			while(buffer[0]!=49){  // ascii code of 1 is 49 which is stored in file
 				current_row_no+=total_row_size;
 				raf.seek(current_row_no);
