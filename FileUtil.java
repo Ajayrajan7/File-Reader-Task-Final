@@ -21,7 +21,7 @@ public class FileUtil {
 
 class FileDeleteUtil {
    public static synchronized int deleteLines(String tableName) throws IOException{
-    System.out.println("Deleting");
+    System.out.println("Deleting Process:");
     FileReader inputFileReader = null;
     BufferedReader brIn = null;
     FileWriter  outputFileWriter = null;
@@ -36,8 +36,9 @@ class FileDeleteUtil {
         bwOut = new BufferedWriter(outputFileWriter);
         while ((line = brIn.readLine()) != null){
             if(line.charAt(0)!='0'){
-                System.out.println(line);
+                System.out.println("not to be deleted: "+line);
                 outputFileWriter.write(line);
+                outputFileWriter.write("\n");
             }
                 
         }
@@ -52,15 +53,18 @@ class FileDeleteUtil {
     finally{
         //rename old file
         File file1 = new File(origFile);
-        File file2 = new File("temp-"+origFile);
-        file1.renameTo(file2);
+        File file2 = new File(GetTableDetails.dataPath+File.separator+"temp-"+tableName+".txt");
+        System.out.println(file2.exists());
+        System.out.println(file1.renameTo(file2));
        
         //rename current file
-        File file3 = new File(filenameTemp);
+        File file3 = new File(GetTableDetails.dataPath+File.separator+filenameTemp+".txt");
         File file4 = new File(origFile);
         file3.renameTo(file4);
 
         file2.delete();
+
+        System.out.println("Done");
         try{
             inputFileReader.close();
             outputFileWriter.close();
