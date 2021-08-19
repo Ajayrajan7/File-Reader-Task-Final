@@ -58,7 +58,7 @@ public class RowGenerator implements RowGeneratorImpl{
 	@Override
 	public boolean hasNext(){
 		try{
-			System.out.println(new String(buffer));
+			System.out.println(raf);
 			raf.seek(current_row_no);
 			Arrays.fill(buffer, (byte)0);
 			raf.readFully(buffer);

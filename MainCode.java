@@ -18,8 +18,10 @@ class MainCode{
 			// r.addToTable();
 
 			Select s = new Select("users");
-			s.executeQuery();
+			List<Row> results=s.executeQuery();
+			System.out.println(results);
 
+			
 			// data.clear();
 			// list.remove(0);
 			

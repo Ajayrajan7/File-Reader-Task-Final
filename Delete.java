@@ -13,7 +13,7 @@ public class Delete{
    public Delete(String tablename){
         this.tablename = tablename;
         // this.dataFilePath = GetTableDetails.dataPath;
-        this.filePath = "C:\\Users\\AjaySandhya\\Desktop\\file task\\File DB3\\conf\\"+tablename+".props";
+        this.filePath = GetTableDetails.confPath+"\\"+tablename+".props";
         p=new Properties();
         try{
             p.load(new FileReader(filePath));

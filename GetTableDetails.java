@@ -6,12 +6,16 @@ public class GetTableDetails {
     public static HashMap<String,LinkedHashMap<String,Types>> tablesVsFieldDetails = new HashMap<>();
     public static HashMap<String,LinkedHashMap<String,Integer>> tableVsSize = new HashMap<>();
     static String dataPath="";
+    static String confPath="";
     
     public static void initialize(String path) throws IOException{
-        Properties props = parseProps("C:\\Users\\AjaySandhya\\Desktop\\file task\\File DB3\\conf\\Tables.props");
-        Properties props2 = parseProps("C:\\Users\\AjaySandhya\\Desktop\\file task\\File DB3\\conf\\dataconfig.props");
-        dataPath = props2.getProperty("DataLocation");
-        createTablesVsFields(props);
+        
+        Properties props = parseProps(System.getProperty("user.dir")+"\\config.props");
+        dataPath = props.getProperty("DataLocation");
+        confPath = props.getProperty("ConfigLocation");
+        
+        Properties props2 = parseProps(confPath+"\\Tables.props");
+        createTablesVsFields(props2);
     }
 
     private static Properties parseProps(String path) throws IOException{
@@ -34,13 +38,13 @@ public class GetTableDetails {
         }
     }
     private static void createPropsFileForDeletionTracking(String key){
-        File f = new File("C:\\Users\\AjaySandhya\\Desktop\\file task\\File DB3\\conf\\"+key+".props");
+        File f = new File(confPath+"\\"+key+".props");
         if(!f.exists()){
             try{
                 f.createNewFile();
                 Properties p = new Properties();
                 p.setProperty(key,"0");
-                p.store(new FileOutputStream("C:\\Users\\AjaySandhya\\Desktop\\file task\\File DB3\\conf\\"+key+".props"),"Props file for tracking delete rows");
+                p.store(new FileOutputStream(confPath+"\\"+key+".props"),"Props file for tracking delete rows");
                 System.out.println("New file is for deletion tracking");
             }catch(Exception e){
                 System.out.println(e);
