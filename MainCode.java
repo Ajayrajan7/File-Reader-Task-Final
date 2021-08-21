@@ -6,7 +6,7 @@ public class MainCode{
 			GetTableDetails.initialize(" ");
 
 			// insertRecords("users");
-			// deleteAllRecords("users");
+			deleteAllRecords("users");
 			getAllRecords("users");
 			// getAllRecordsWithQuery("users");
 			
@@ -21,7 +21,7 @@ public class MainCode{
 			// s.columns("user_id","name");
 			List<Row> results=s.executeQuery();
 			
-			int i=0;
+			int i=1;
 			System.out.println("\nResults:");
 			for(Row r:results){
 				System.out.println("\nRecord "+i);
@@ -43,7 +43,7 @@ public class MainCode{
 			Criteria c = s.getCriteria().where("user_id",Operator.EQU,(Integer)1).and("email",Operator.EQU,"ajay@gmail.com");
 			List<Row> results=s.executeQuery();
 			
-			int i=0;
+			int i=1;
 			System.out.println("\nResults:");
 			for(Row r:results){
 				System.out.println("\nRecord "+i);
@@ -75,7 +75,7 @@ public class MainCode{
 	public static void deleteAllRecords(String tablename){
 		try{
 			Delete d = new Delete(tablename);
-			Criteria c = d.getCriteria().where("user_id",Operator.EQU,6);
+			Criteria c = d.getCriteria().where("user_id",Operator.EQU,10);
 			d.executeQuery();
 			System.out.println("Deletion done!");
 		}catch(Exception e){
@@ -90,40 +90,40 @@ public class MainCode{
 			
 			data.put("password","samp");
 			data.put("user_id",5);
-			data.put("email","sample1@gmail.com");
-			data.put("name","Sample 1");
+			data.put("email","Temp1@gmail.com");
+			data.put("name","Temp 1");
 			list.add(data);
 
 			HashMap<String,Object> data2 = new HashMap<>();
 			
 			data2.put("password","samp2");
 			data2.put("user_id",6);
-			data2.put("email","samp2@gmail.com");
-			data2.put("name","Sample 2");
+			data2.put("email","Temp2@gmail.com");
+			data2.put("name","Temp 2");
 			list.add(data2);
 
 			HashMap<String,Object> data3 = new HashMap<>();
 			
 			data3.put("password","samp3");
 			data3.put("user_id",7);
-			data3.put("email","samp3@gmail.com");
-			data3.put("name","Sample 3");
+			data3.put("email","Temp3@gmail.com");
+			data3.put("name","Temp 3");
 			list.add(data3);
 
 			HashMap<String,Object> data4 = new HashMap<>();
 			
 			data4.put("password","samp4");
 			data4.put("user_id",8);
-			data4.put("email","samp4@gmail.com");
-			data4.put("name","Sample 4");
+			data4.put("email","Temp4@gmail.com");
+			data4.put("name","Temp 4");
 			list.add(data4);
 
 			HashMap<String,Object> data5 = new HashMap<>();
 			
 			data5.put("password","samp5");
 			data5.put("user_id",9);
-			data5.put("email","samp5@gmail.com");
-			data5.put("name","Sample 5");
+			data5.put("email","Temp5@gmail.com");
+			data5.put("name","Temp 5");
 			list.add(data5);
 
 			Insert r = new Insert("users",list);

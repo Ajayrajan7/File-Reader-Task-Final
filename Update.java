@@ -3,7 +3,6 @@ import java.io.*;
 public class Update{
    private Criteria criteria = new Criteria();
    private Row r;
-   private String[] columns;
    private String tablename;
    private LinkedHashMap<String,Object> toUpdateFields = new LinkedHashMap<>();
    public Update(String tablename){

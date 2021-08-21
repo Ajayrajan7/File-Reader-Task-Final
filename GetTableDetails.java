@@ -18,7 +18,7 @@ public class GetTableDetails {
         createTablesVsFields(props2);
     }
 
-    private static Properties parseProps(String path) throws IOException{
+    public static Properties parseProps(String path) throws IOException{
         Properties p = new Properties();
         FileReader f = new FileReader(path);
         p.load(f);

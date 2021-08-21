@@ -54,7 +54,7 @@ class FileDeleteUtil {
         inputFileReader.close();
         outputFileWriter.close();
         
-        //rename old file
+        //delete old file
         File file1 = new File(origFile);
         System.out.println(file1.delete());
 
