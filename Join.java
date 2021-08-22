@@ -34,6 +34,21 @@ class Column{
         return this;
     }
 
+    public Column lt(){
+     
+    }
+
+    public Column gt(){
+
+    }
+
+    public Column gte(){
+
+    }
+
+    public Column lte(){
+
+    }
     public boolean evaluate(Row LHS,Row RHS){
         return differentiateAndEvaluate(LHS,RHS);
     }
@@ -47,6 +62,8 @@ class Column{
         this.tableName_another = tableName1;    
     }
 
+
+    
 }
 
 
@@ -130,35 +147,59 @@ public class JoinUtil {
 }
 
 public class Join{
-    private List<String> tableNames = new LinkedList<>();
-    private List<WrappedColumn> constrainChain = new LinkedList<>();
-    private List<JoinConstraint> joinChain = new LinkedList<>();
+    private List<String> chainedTableName = new LinkedList<>();
+    private Queue<JoinConstraint> joinChain = new LinkedList<>();
     private TYPES type;
     private int STATE = -1;
 
-    public Join(String tableName){
-          tableNames.add(tableName);    
-    }
+    //Select("User1")
+        //  .leftJoin("User1").on(
+        //   new Column("User1","id").equals(new Column("User2.id")
+        // ).and(
+        //  new Column("User2","id").lt(20)
+        // ).innerjoin("User3").
+        //  new Column("User1","id").equals(new Column("User2","id")
+        // )
 
-    public JoinConstraint leftJoin(String RHSTableName){
-         checkStateAndThrowException()
-         Join nextChain = new Join(RHSTableName);
+    public JoinConstraint leftJoin(String RHSTableName) throws JoinException{
+         checkStateAndThrowException();
          return new JoinConstraint();
     }
 
-    public JoinConstraint InnerJoin(String RHSTableName){
-        checkStateAndThrowException()
+    public JoinConstraint InnerJoin(String RHSTableName) throws JoinException{
+        checkStateAndThrowException();
         return new Join();
     }
 
-    public JoinConstraint rightJoin(String RHSTableName){
-        checkStateAndThrowException()
+    public JoinConstraint rightJoin(String RHSTableName) throws JoinException{
+        checkStateAndThrowException();
         return new Join();
+    }
+
+    public void addTableName(String tableName) throws NoSuchTableException{
+            chainedTableName.add(tableName);
+    }
+
+    public boolean isValidTable(String tableName){
+        return chainedTableName.contains(tableName);
+    }
+
+    public void checkStateAndThrowException() throws JoinException{
+        if(STATE < 0){
+            throw new JoinException("[LEFT|RIGHT|INNER] Join without Constraints");
+        }
     }
 
 
 
 
+}
+
+
+public class JoinException extends Exception{
+     public JoinException(String message){
+        super(message);
+     }
 }
 
 //Select("User1")
@@ -171,14 +212,14 @@ public class Join{
         // )
 
 public class JoinConstraint{
+    private List<WrappedColumn> constrainChain = new LinkedList<>();
     public JoinConstraint on(Column finalColumn){
-        finalColumn.setAnotherTableName(tableName);
         constrainChain.add(new WrappedColumn(ExpressionName.AND, finalColumn));
         return this;
    }
 
-   public JoinConstraint equals(
-
+   public JoinConstraint equals()
+        
    }
 
    public boolean hasField(Column column){
