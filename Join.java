@@ -203,34 +203,38 @@ public class JoinUtil {
 }
 
 public class Join{
-    private List<String> chainedTableName = new LinkedList<>();
+    protected List<String> chainedTableName = new LinkedList<>();
+    private String tempFileName = JoinUtil.calculatedTempFileName();
+    private JoinResult jr = new JoinResult(tempFileName,chainedTableName);
     private JoinConstraint joinConstraints;
     private TYPES type;
-    private int STATE = -1;
     private String tempTableName ;
-
+    
     //Select("User1")
         //  .leftJoin("User1").on(
         //   new Field("User1","id").equals(new Field("User2.id")
         // ).and(
         //  new Field("User2","id").lt(20)
-        // ).innerjoin("User3").
+        // ).rightJoin("User3").
         //  new Field("User1","id").equals(new Field("User2","id")
         // )
 
     public JoinConstraint leftJoin(String RHSTableName) throws JoinException{
+         type = TYPES.LEFTJOIN;
          checkStateAndThrowException();
-         return new JoinConstraint();
+         return new JoinConstraint(jr);
     }
 
     public JoinConstraint InnerJoin(String RHSTableName) throws JoinException{
+        type = TYPES.INNERJOIN;
         checkStateAndThrowException();
-        return new Join();
+        return new JoinConstraint(jr);
     }
 
     public JoinConstraint rightJoin(String RHSTableName) throws JoinException{
+        type = TYPES.RIGHTJOIN;
         checkStateAndThrowException();
-        return new Join();
+        return new JoinConstraint(jr);
     }
 
     public void addTableName(String tableName) throws NoSuchTableException{
@@ -269,15 +273,50 @@ public class JoinException extends Exception{
         //  new Field("User1","id").equals(new Field("User2","id")
         // )
 
-public class JoinResult extends Join {
-    private Join joinPrev;
+public class JoinResult extends Join implements RowGeneratorImpl{
+    private String tempTableName;
+    public JoinResult(String tempTableName,List<String> chainedTableName){
+        this.tempTableName = tempTableName;
+        this.chainedTableName = chainedTableName;
+    }
+
+    @Override
+	public boolean hasNext(){
+        return false;
+    }
+    /**
+     * @return Row of two joined tables combined together with all fields
+     */
+    @Override 
+    public Row next(){
+
+    }
+ 
+
+    /**
+     * @return void 
+     * This method should be called interanally once the join results exhausted.
+     */
+    private void deleteFile(){
+        /*
+        Delete the file with the name of the tempTableName
+        */
+    }
+
+    public void finalize(){
+        deleteFile();
+    }
 
 }
 
 public class JoinConstraint{
     private List<WrappedField> constrainChain = new LinkedList<>();
     private byte STATE = -1;
-    public Join JOIN ;
+    private JoinResult jr;
+    
+    public JoinConstraint(JoinResult jr){
+        this.jr = jr;
+    }
     public JoinConstraint on(Field finalField) throws IllegalStateException{
         if(STATE != 0) throw new IllegalStateException("on clause Called multiple times");
         constrainChain.add(new WrappedField(ExpressionName.AND, finalField));
@@ -297,6 +336,10 @@ public class JoinConstraint{
         return this;
    }
 
+   public JoinResult getResult(){
+       return jr;
+   }
+
 
 
    public List<WrappedField> getConstaintChain(){
@@ -310,7 +353,7 @@ public class JoinConstraint{
 
 
    private boolean constructFieldWithTableNameAndCheckIfFieldExists(Field field){
-      return checkIfTableConstainsField(field.tableName, field.fieldName);
+      return checkIfTableConstainsField(field.tableName_self, field.fieldName_self);
    }
 
   
