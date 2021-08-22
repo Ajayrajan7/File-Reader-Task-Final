@@ -1,81 +1,145 @@
 import java.util.*;
 import java.io.*;
-class Column{
+class Field{
     public String tableName_self,fieldName_self;
     private String tableName_another,fieldName_another;
+    private FIELDTYPES fieldType = FIELDTYPES.LEFT_IS_FIELD_AND_RIGHT_IS_CONSTANT;
+    private Operator operator;
+    private boolean isRHSfield = true;
+    private Comparable<Object> fieldValue;
     private int state = -1;
-    public Column(String tableName,String fieldName) throws IllegalArgumentException{
+    private Row rhs,lhs;
+    public Field(String tableName,String fieldName) throws IllegalArgumentException{
        this.tableName_self=tableName;
        this.fieldName_self=fieldName;
 
        if(tableName == null || fieldName == null) throw new IllegalArgumentException("tableName or fieldName shouldn't be null");
     }
 
-    public Column equals(Object RHSColumnOrConstValue) throws IllegalArgumentException{
-        if(RHSColumnOrConstValue instanceof Column){
-             Column column = (Column)RHSColumnOrConstValue;
-             if(tableName_self.equals(column.tableName_self)){
-                 /*Self table join*/
+    
 
-             }
-             else{
-                /*Another table join*/
-             }
-        }
-        else{
-            if(RHSColumnOrConstValue instanceof String){
-                RHSColumnField = (String)RHSColumnOrConstValue;    
-            }
-            else{
-                throw new IllegalArgumentException("The arguement ["+RHSColumnOrConstValue+"] should be column value"+
-                "or constant");
-            }              
-        }
+
+    public Field equals(Object RHSFieldOrConstValue) throws IllegalArgumentException{
+        operator = Operator.EQU;
+        castGivenArgument(RHSFieldOrConstValue);
         return this;
     }
 
-    public Column lt(){
-     
+    public Field lt(Object RHSFieldOrConstValue) throws IllegalArgumentException{
+        operator = Operator.LT;
+        castGivenArgument(RHSFieldOrConstValue);
+        return this;
     }
 
-    public Column gt(){
-
+    public Field gt(Object RHSFieldOrConstValue) throws IllegalArgumentException{
+        operator = Operator.GT;
+        castGivenArgument(RHSFieldOrConstValue);
+        return this;
     }
 
-    public Column gte(){
-
+    public Field gte(Object RHSFieldOrConstValue) throws IllegalArgumentException{
+        operator = Operator.GTE;
+        castGivenArgument(RHSFieldOrConstValue);
+        return this;
     }
 
-    public Column lte(){
-
+    public Field lte(Object RHSFieldOrConstValue) throws IllegalArgumentException{
+        operator = Operator.LTE;
+        castGivenArgument(RHSFieldOrConstValue);
+        return this;
     }
     public boolean evaluate(Row LHS,Row RHS){
-        return differentiateAndEvaluate(LHS,RHS);
+        lhs = LHS;
+        rhs = RHS;  
+        return differentiateAndEvaluate();
     }
 
-    private boolean differentiateAndEvaluate(Row LHS,Row RHS){
-         
+    private boolean differentiateAndEvaluate(){
+        switch(fieldType){
+            case LEFT_IS_FIELD_AND_RIGHT_IS_CONSTANT:
+               return fieldVsFieldEval();
+            case LEFT_IS_FIELD_AND_RIGHT_IS_FIELD:
+               return fieldVsFieldEval();
+            default:
+               return false;
+        }
+    }
+    
+    private boolean fieldVsConstEval(Comparable<Object> RHS){
+        switch(operator){
+            case GT :
+                  return fieldValue.compareTo(RHS) == 1 ;
+            case EQU :
+                  return fieldValue.compareTo(RHS) == 0;
+            case GTE :
+                  return fieldValue.compareTo(RHS) >= 0;
+            case LTE :
+                  return fieldValue.compareTo(RHS) <= 0;
+            case LT :
+                  return fieldValue.compareTo(RHS) < 0; 
+            default :
+                  return false;   
+       }
     }
 
-
-    public void setAnotherTableName(String tableName1){
-        this.tableName_another = tableName1;    
+    private boolean fieldVsFieldEval(){
+        Comparable<Object> lhsValue = (Comparable)lhs.getColumn(fieldName_self); //can be changed based on "User1.Id" or "Id".
+        Comparable<Object> rhsValue = (Comparable)rhs.getColumn(fieldName_another);
+        if(lhsValue == null || rhsValue == null) return false;
+        switch(operator){
+            case GT :
+                  return lhsValue.compareTo(rhsValue) == 1 ;
+            case EQU :
+                  return lhsValue.compareTo(rhsValue) == 0;
+            case GTE :
+                  return lhsValue.compareTo(rhsValue) >= 0;
+            case LTE :
+                  return lhsValue.compareTo(rhsValue) <= 0;
+            case LT :
+                  return lhsValue.compareTo(rhsValue) < 0; 
+            default :
+                  return false;   
+       }
     }
 
+    public void castGivenArgument(Object RHSFieldOrConstValue){
+        if(RHSFieldOrConstValue instanceof Field){
+           Field field = (Field)RHSFieldOrConstValue;
+           tableName_another = field.fieldName_self;
+           fieldName_another = field.fieldName_self;
+           fieldType = FIELDTYPES.LEFT_IS_FIELD_AND_RIGHT_IS_FIELD;
+       }
+       else{
+           if((RHSFieldOrConstValue instanceof Number) || (RHSFieldOrConstValue instanceof String)){
+              fieldValue = (Comparable<Object>)RHSFieldOrConstValue;
+           }
+           else{
+               throw new IllegalArgumentException("The arguement ["+RHSFieldOrConstValue+"] should be field value"+
+               "or constant");
+           }              
+       }
+    }
 
+//Select("User1").leftJoin("User1").on(
+        //   new Field("User1","id").equals(new Field("User2.id")
+        // ).and(
+        //  new Field("User2","id").lt(20)
+        // ).innerjoin("User3").
+        //  new Field("User1","id").equals(new Field("User2","id")
+        // )
     
 }
 
 
 //Select("User1").leftJoin("User1").on(
-        //   new Column("User1","id").equals(new Column("User2.id")
+        //   new Field("User1","id").equals(new Field("User2.id")
         // ).and(
-        //  new Column("User2","id").lt(20)
+        //  new Field("User2","id").lt(20)
         // ).innerjoin("User3").
-        //  new Column("User1","id").equals(new Column("User2","id")
+        //  new Field("User1","id").equals(new Field("User2","id")
         // )
 
-enum JOINTYPES {
+enum FIELDTYPES {
      LEFT_IS_FIELD_AND_RIGHT_IS_CONSTANT,
     //  LEFT_IS_CONSTANT_AND_RIGHT_IS_FIELD,
     //  LEFT_IS_CONSTANT_AND_RIGHT_IS_CONSTANT,
@@ -113,16 +177,16 @@ public class JoinResponse{
 
 }
 
-public class WrappedColumn{
+public class WrappedField{
     private ExpressionName expressionName;
-    private Column column ;
-    public WrappedColumn(ExpressionName expressionName,Column column){
+    private Field field ;
+    public WrappedField(ExpressionName expressionName,Field field){
          this.expressionName = expressionName;
-         this.column = column;
+         this.field = field;
     }
 
-    public Column getColumn(){
-        return column;
+    public Field getField(){
+        return field;
     }
 
 }
@@ -154,11 +218,11 @@ public class Join{
 
     //Select("User1")
         //  .leftJoin("User1").on(
-        //   new Column("User1","id").equals(new Column("User2.id")
+        //   new Field("User1","id").equals(new Field("User2.id")
         // ).and(
-        //  new Column("User2","id").lt(20)
+        //  new Field("User2","id").lt(20)
         // ).innerjoin("User3").
-        //  new Column("User1","id").equals(new Column("User2","id")
+        //  new Field("User1","id").equals(new Field("User2","id")
         // )
 
     public JoinConstraint leftJoin(String RHSTableName) throws JoinException{
@@ -204,17 +268,17 @@ public class JoinException extends Exception{
 
 //Select("User1")
         //  .leftJoin("User1").on(
-        //   new Column("User1","id").equals(new Column("User2.id")
+        //   new Field("User1","id").equals(new Field("User2.id")
         // ).and(
-        //  new Column("User2","id").lt(20)
+        //  new Field("User2","id").lt(20)
         // ).innerjoin("User3").
-        //  new Column("User1","id").equals(new Column("User2","id")
+        //  new Field("User1","id").equals(new Field("User2","id")
         // )
 
 public class JoinConstraint{
-    private List<WrappedColumn> constrainChain = new LinkedList<>();
-    public JoinConstraint on(Column finalColumn){
-        constrainChain.add(new WrappedColumn(ExpressionName.AND, finalColumn));
+    private List<WrappedField> constrainChain = new LinkedList<>();
+    public JoinConstraint on(Field finalField){
+        constrainChain.add(new WrappedField(ExpressionName.AND, finalField));
         return this;
    }
 
@@ -222,14 +286,14 @@ public class JoinConstraint{
         
    }
 
-   public boolean hasField(Column column){
+   public boolean hasField(Field field){
 
-       return constructFieldWithTableNameAndCheckIfFieldExists(column);
+       return constructFieldWithTableNameAndCheckIfFieldExists(field);
    }
 
 
-   private boolean constructFieldWithTableNameAndCheckIfFieldExists(Column column){
-      return checkIfTableConstainsColumn(column.tableName, column.fieldName);
+   private boolean constructFieldWithTableNameAndCheckIfFieldExists(Field field){
+      return checkIfTableConstainsField(field.tableName, field.fieldName);
    }
 
   
@@ -258,12 +322,12 @@ enum TYPES {
 //select * from User1 INNER JOIN User2 on User1.id = User2.id and User1.name = "Chella" 
 //   LEFT JOIN join User3 on User3.id > 20
 
-// Select("User1").join(new Join("User2"),JoinTypes.INNERJOIN).on(new Column("User1.id"),Operator.EQUALS,new Column("User2.id")).and(new Column("User1.name"),Operator.EQUALS,"chella")
+// Select("User1").join(new Join("User2"),JoinTypes.INNERJOIN).on(new Field("User1.id"),Operator.EQUALS,new Field("User2.id")).and(new Field("User1.name"),Operator.EQUALS,"chella")
 //.join(new Join("User3"),JoinTypes.LEFTJOIN)).on("User3.id",Operator.GT,20);
 
 
-//Select("User1").where(new Column("Id").equals("20"))
-//Select("User1").leftJoin("User1").on(new Column("User1.id").equals(new Column("User2.id")).and(new Column("User2.id").lt(20))
+//Select("User1").where(new Field("Id").equals("20"))
+//Select("User1").leftJoin("User1").on(new Field("User1.id").equals(new Field("User2.id")).and(new Field("User2.id").lt(20))
 /*
 SELECT role_names.role_name, permissions.permission_name 
 FROM role_names  JOIN role_to_permission  ON role_names.role_id=role_to_permission.role_id
