@@ -16,8 +16,6 @@ class Field{
        if(tableName == null || fieldName == null) throw new IllegalArgumentException("tableName or fieldName shouldn't be null");
     }
 
-    
-
 
     public Field equals(Object RHSFieldOrConstValue) throws IllegalArgumentException{
         operator = Operator.EQU;
@@ -64,7 +62,7 @@ class Field{
                return false;
         }
     }
-    
+
     private boolean fieldVsConstEval(Comparable<Object> RHS){
         switch(operator){
             case GT :
@@ -115,29 +113,16 @@ class Field{
            }
            else{
                throw new IllegalArgumentException("The arguement ["+RHSFieldOrConstValue+"] should be field value"+
-               "or constant");
+               "or constant of type comparable");
            }              
        }
     }
 
-//Select("User1").leftJoin("User1").on(
-        //   new Field("User1","id").equals(new Field("User2.id")
-        // ).and(
-        //  new Field("User2","id").lt(20)
-        // ).innerjoin("User3").
-        //  new Field("User1","id").equals(new Field("User2","id")
-        // )
+
     
 }
 
 
-//Select("User1").leftJoin("User1").on(
-        //   new Field("User1","id").equals(new Field("User2.id")
-        // ).and(
-        //  new Field("User2","id").lt(20)
-        // ).innerjoin("User3").
-        //  new Field("User1","id").equals(new Field("User2","id")
-        // )
 
 enum FIELDTYPES {
      LEFT_IS_FIELD_AND_RIGHT_IS_CONSTANT,
@@ -176,6 +161,13 @@ public class JoinResponse{
    }
 
 }
+//Select("User1").leftJoin("User1").on(
+        //   new Field("User1","id").equals(new Field("User2.id")
+        // ).and(
+        //  new Field("User2","id").lt(20)
+        // ).innerjoin("User3").
+        //  new Field("User1","id").equals(new Field("User2","id")
+        // )
 
 public class WrappedField{
     private ExpressionName expressionName;
@@ -212,9 +204,10 @@ public class JoinUtil {
 
 public class Join{
     private List<String> chainedTableName = new LinkedList<>();
-    private Queue<JoinConstraint> joinChain = new LinkedList<>();
+    private JoinConstraint joinConstraints;
     private TYPES type;
     private int STATE = -1;
+    private String tempTableName ;
 
     //Select("User1")
         //  .leftJoin("User1").on(
@@ -266,24 +259,48 @@ public class JoinException extends Exception{
      }
 }
 
-//Select("User1")
+        // JoinResult jr = Select("User1")
         //  .leftJoin("User1").on(
         //   new Field("User1","id").equals(new Field("User2.id")
         // ).and(
         //  new Field("User2","id").lt(20)
-        // ).innerjoin("User3").
+        // )
+        // jr.innerjoin("User3").
         //  new Field("User1","id").equals(new Field("User2","id")
         // )
 
+public class JoinResult extends Join {
+    private Join joinPrev;
+
+}
+
 public class JoinConstraint{
     private List<WrappedField> constrainChain = new LinkedList<>();
-    public JoinConstraint on(Field finalField){
+    private byte STATE = -1;
+    public Join JOIN ;
+    public JoinConstraint on(Field finalField) throws IllegalStateException{
+        if(STATE != 0) throw new IllegalStateException("on clause Called multiple times");
+        constrainChain.add(new WrappedField(ExpressionName.AND, finalField));
+        STATE++;
+        return this;
+   }
+
+   public JoinConstraint and(Field finalField) throws IllegalStateException{
+        checkStateAndThrowException();
         constrainChain.add(new WrappedField(ExpressionName.AND, finalField));
         return this;
    }
 
-   public JoinConstraint equals()
-        
+   public JoinConstraint or(Field finalField) throws IllegalStateException{
+        checkStateAndThrowException();
+        constrainChain.add(new WrappedField(ExpressionName.OR, finalField));
+        return this;
+   }
+
+
+
+   public List<WrappedField> getConstaintChain(){
+       return constrainChain;
    }
 
    public boolean hasField(Field field){
@@ -302,6 +319,13 @@ public class JoinConstraint{
        /* check if the table hashmap constain the given field */
        boolean hasField = true;
        return hasField ? true : false;
+   }
+
+
+   private void checkStateAndThrowException() throws IllegalStateException{
+       if(STATE > 0){
+          throw new IllegalStateException("On clause should be called before adding logical statements [AND|OR]");
+       }
    }
 }
     
