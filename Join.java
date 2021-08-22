@@ -265,10 +265,11 @@ public class JoinException extends Exception{
 
         // JoinResult jr = Select("User1")
         //  .leftJoin("User1").on(
-        //   new Field("User1","id").equals(new Field("User2.id")
+        //   new Field("User1","id").equals(new Field("User2","id")
         // ).and(
         //  new Field("User2","id").lt(20)
-        // )
+        // ).getResult();
+	// 
         // jr.innerjoin("User3").
         //  new Field("User1","id").equals(new Field("User2","id")
         // )
@@ -360,7 +361,7 @@ public class JoinConstraint{
    
    private boolean checkIfTableConstainsField(String tableName,String fieldName){
        /* check if the table hashmap constain the given field */
-       boolean hasField = true;
+       boolean hasField = GetTableDetails.tablesVsFieldDetails.get(tableName)!=null && GetTableDetails.tablesVsFieldDetails.get(tableName).get(fieldName)!=null; 
        return hasField ? true : false;
    }
 
