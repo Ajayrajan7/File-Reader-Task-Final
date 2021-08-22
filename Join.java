@@ -53,7 +53,9 @@ class Column{
 //Select("User1").leftJoin("User1").on(
         //   new Column("User1","id").equals(new Column("User2.id")
         // ).and(
-        // new Column("User2","id").lt(20)
+        //  new Column("User2","id").lt(20)
+        // ).innerjoin("User3").
+        //  new Column("User1","id").equals(new Column("User2","id")
         // )
 
 enum JOINTYPES {
@@ -62,6 +64,7 @@ enum JOINTYPES {
     //  LEFT_IS_CONSTANT_AND_RIGHT_IS_CONSTANT,
      LEFT_IS_FIELD_AND_RIGHT_IS_FIELD
 }
+
 
 public class JoinResponse{
    private List<Row> left = new ArrayList<>();
@@ -127,71 +130,84 @@ public class JoinUtil {
 }
 
 public class Join{
-    private String tableName;
+    private List<String> tableNames = new LinkedList<>();
     private List<WrappedColumn> constrainChain = new LinkedList<>();
-    private List<Join>   joinChain = new LinkedList<>();
+    private List<JoinConstraint> joinChain = new LinkedList<>();
+    private TYPES type;
+    private int STATE = -1;
 
     public Join(String tableName){
-
+          tableNames.add(tableName);    
     }
 
-    public Join leftJoin(String RHSTableName){
-         return this;
+    public JoinConstraint leftJoin(String RHSTableName){
+         checkStateAndThrowException()
+         Join nextChain = new Join(RHSTableName);
+         return new JoinConstraint();
     }
 
-    public Join InnerJoin(String RHSTableName){
-        return this;
+    public JoinConstraint InnerJoin(String RHSTableName){
+        checkStateAndThrowException()
+        return new Join();
     }
 
-    public Join rightJoin(String RHSTableName){
-        return this;
-    }
-
-    public Join on(Column finalColumn){
-         finalColumn.setAnotherTableName(tableName);
-         constrainChain.add(new WrappedColumn(ExpressionName.AND, finalColumn));
-         return this;
-    }
-
-    public Join equals(Object RHSColumnOrConstValue) throws IllegalArgumentException{
-        String RHSColumnField = null;
-        if(RHSColumnOrConstValue instanceof Column){
-
-        }
-        else{
-            if(RHSColumnOrConstValue instanceof String){
-                RHSColumnField = (String)RHSColumnOrConstValue;    
-            }
-            else{
-                throw new IllegalArgumentException("The arguement ["+RHSColumnOrConstValue+"] should be column value"+
-                "or constant");
-            }
-                       
-        }
-        return this;
-    }
-
-    
-
-    public boolean hasField(Column column){
-
-        return constructFieldWithTableNameAndCheckIfFieldExists(column);
+    public JoinConstraint rightJoin(String RHSTableName){
+        checkStateAndThrowException()
+        return new Join();
     }
 
 
-    private boolean constructFieldWithTableNameAndCheckIfFieldExists(Column column){
-       return checkIfTableConstainsColumn(column.tableName, column.fieldName);
-    }
 
-   
-    
-    private boolean checkIfTableConstainsField(String tableName,String fieldName){
-        /* check if the table hashmap constain the given field */
-        boolean hasField = true;
-        return hasField ? true : false;
-    }
 
 }
+
+//Select("User1")
+        //  .leftJoin("User1").on(
+        //   new Column("User1","id").equals(new Column("User2.id")
+        // ).and(
+        //  new Column("User2","id").lt(20)
+        // ).innerjoin("User3").
+        //  new Column("User1","id").equals(new Column("User2","id")
+        // )
+
+public class JoinConstraint{
+    public JoinConstraint on(Column finalColumn){
+        finalColumn.setAnotherTableName(tableName);
+        constrainChain.add(new WrappedColumn(ExpressionName.AND, finalColumn));
+        return this;
+   }
+
+   public JoinConstraint equals(
+
+   }
+
+   public boolean hasField(Column column){
+
+       return constructFieldWithTableNameAndCheckIfFieldExists(column);
+   }
+
+
+   private boolean constructFieldWithTableNameAndCheckIfFieldExists(Column column){
+      return checkIfTableConstainsColumn(column.tableName, column.fieldName);
+   }
+
+  
+   
+   private boolean checkIfTableConstainsField(String tableName,String fieldName){
+       /* check if the table hashmap constain the given field */
+       boolean hasField = true;
+       return hasField ? true : false;
+   }
+}
+    
+
+enum TYPES {
+        LEFTJOIN,
+        RIGHTJOIN,
+        INNERJOIN,
+        // CROSSJOIN
+    }
+
 
 
 
