@@ -24,7 +24,24 @@ public class JoinResult extends Join implements RowGeneratorImpl{
 
     }
  
-
+    public List<Row> getRows(){
+        String tempTableName = getLHSTableName();
+        try{
+            RowGenerator rowGen = new RowGenerator(tempTableName);
+            List<Row> results = new ArrayList<>();
+            while(rowGen.hasNext()){
+                Row r = rowGen.next();
+                results.add(r);
+            }   
+            return results;
+       }catch(RowExhausedException e){
+           System.out.println(e);
+       }catch(FileNotFoundException e){
+           System.out.println(e);
+       }
+       return null;
+        
+    }
     /**
      * @return void 
      * This method should be called interanally once the join results exhausted.
