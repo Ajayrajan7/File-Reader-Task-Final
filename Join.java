@@ -103,7 +103,7 @@ class Field{
     public void castGivenArgument(Object RHSFieldOrConstValue){
         if(RHSFieldOrConstValue instanceof Field){
            Field field = (Field)RHSFieldOrConstValue;
-           tableName_another = field.fieldName_self;
+           tableName_another = field.tableName_self;
            fieldName_another = field.fieldName_self;
            fieldType = FIELDTYPES.LEFT_IS_FIELD_AND_RIGHT_IS_FIELD;
        }
@@ -116,10 +116,7 @@ class Field{
                "or constant of type comparable");
            }              
        }
-    }
-
-
-    
+    }    
 }
 
 
@@ -219,21 +216,21 @@ public class Join{
         //  new Field("User1","id").equals(new Field("User2","id")
         // )
 
-    public JoinConstraint leftJoin(String RHSTableName) throws JoinException{
+    public JoinConstraint leftJoin(String RHSTableName) throws JoinException,NoSuchTableException{
          type = TYPES.LEFTJOIN;
-         checkStateAndThrowException();
+         addTableName(RHSTableName);
          return new JoinConstraint(jr);
     }
 
-    public JoinConstraint InnerJoin(String RHSTableName) throws JoinException{
+    public JoinConstraint InnerJoin(String RHSTableName) throws JoinException,NoSuchTableException{
         type = TYPES.INNERJOIN;
-        checkStateAndThrowException();
+        addTableName(RHSTableName);
         return new JoinConstraint(jr);
     }
 
-    public JoinConstraint rightJoin(String RHSTableName) throws JoinException{
+    public JoinConstraint rightJoin(String RHSTableName) throws JoinException,NoSuchTableException{
         type = TYPES.RIGHTJOIN;
-        checkStateAndThrowException();
+        addTableName(RHSTableName);
         return new JoinConstraint(jr);
     }
 
@@ -245,11 +242,11 @@ public class Join{
         return chainedTableName.contains(tableName);
     }
 
-    public void checkStateAndThrowException() throws JoinException{
-        if(STATE < 0){
-            throw new JoinException("[LEFT|RIGHT|INNER] Join without Constraints");
-        }
-    }
+    // public void checkStateAndThrowException() throws JoinException{
+    //     if(STATE < 0){
+    //         throw new JoinException("[LEFT|RIGHT|INNER] Join without Constraints");
+    //     }
+    // }
 
 
 
@@ -406,3 +403,27 @@ FROM role_names  JOIN role_to_permission  ON role_names.role_id=role_to_permissi
 // insert into test1 values(1,"chella"),(2,"aaaaa"),(3,"dsfdsf"),(4,"dsffwere");
 // insert into test2 values(5,"csfdsdfhella"),(2,"aaaaa"),(6,"dgfdsfdsf"),(7,"fsgdsffwere");
 // --select * from test1 right join test2 ;
+
+/*
+table1ptr=file(users1);
+table2ptr=file(users2);
+while(table1ptr!=null){
+    Row row1 = table1ptr.getRow();
+    while(table2ptr!=null){
+        Row row2 = table2ptr.getRow();
+           boolean isValidRow = reducer(row1,row2);
+    }
+}
+
+ public  boolean reduce(boolean prevState,WrappedCondition wrapped,LHS,RHS){
+         final boolean RHSSTATUS = RHS.getExpression().evaluate(LHS,RHS);
+         switch(wrapped.getExpressionName()){
+            case AND :
+                 return prevstate && RHSSTATUS;
+            case OR :
+                 return prevsate || RHSSTATUS;
+            default :
+                 return false;
+         }
+     }
+*/
