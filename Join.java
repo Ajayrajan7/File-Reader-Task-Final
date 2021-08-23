@@ -63,21 +63,21 @@ public class Join{
     //     }
     // }
 
-    public void setLHSTableName(String LHSTableName,boolean addToChain) throws NoSuchTableException{
+    protected void setLHSTableName(String LHSTableName,boolean addToChain) throws NoSuchTableException{
         this.LHSTableName = LHSTableName;
         addTableName(LHSTableName,addToChain);
 
     }
 
-    public void setRHSTableName(String RHSTableName){
+    protected void setRHSTableName(String RHSTableName){
         this.RHSTableName = RHSTableName;
     }
 
-    public String getLHSTableName(){
+    protected String getLHSTableName(){
         return LHSTableName;
     }
 
-    public String getRHSTableName(){
+    protected String getRHSTableName(){
         return RHSTableName;
     }
 
