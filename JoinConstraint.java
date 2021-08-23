@@ -2,10 +2,10 @@ import java.util.*;
 public class JoinConstraint{
     private List<WrappedField> constrainChain = new LinkedList<>();
     private byte STATE = -1;
-    private JoinResult jr;
+    private Join joinObj;
     
-    public JoinConstraint(JoinResult jr){
-        this.jr = jr;
+    public JoinConstraint(Join joinObj){
+        this.joinObj = joinObj;
     }
     public JoinConstraint on(Field finalField) throws IllegalStateException{
         if(STATE != 0) throw new IllegalStateException("on clause Called multiple times");
@@ -27,7 +27,7 @@ public class JoinConstraint{
    }
 
    public JoinResult getResult(){
-       return jr;
+       return joinObj.getResult();
    }
 
 

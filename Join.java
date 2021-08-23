@@ -4,49 +4,32 @@ public class Join{
     protected List<String> chainedTableName = new LinkedList<>();
     private String tempFileName = JoinUtil.calculatedTempFileName();
     private JoinResult jr = new JoinResult(tempFileName,chainedTableName);
-    private JoinConstraint joinConstraint = new JoinConstraint(jr);
+    private JoinConstraint joinConstraint = new JoinConstraint(this);
     private TYPES type;
     private String LHSTableName;
     private String RHSTableName;
-    public JoinConstraint leftJoin(String RHSTableName) throws JoinException{
-        try{
+    public JoinConstraint leftJoin(String RHSTableName) throws JoinException,NoSuchTableException{
             type = TYPES.LEFTJOIN;
             addTableName(RHSTableName,true);
             setRHSTableName(RHSTableName);
-            //  checkStateAndThrowException();
             return joinConstraint;
-        }catch(NoSuchTableException e){
-            e.printStackTrace();
-        }
-        return null;
     }
 
-    public JoinConstraint innerJoin(String RHSTableName) throws JoinException{
-        try{
+    public JoinConstraint innerJoin(String RHSTableName) throws JoinException,NoSuchTableException{
             type = TYPES.INNERJOIN;
             addTableName(RHSTableName,true);
             setRHSTableName(RHSTableName);
             
             //  checkStateAndThrowException();
             return joinConstraint;
-        }catch(NoSuchTableException e){
-            e.printStackTrace();
-        }
-        return null;
     }
 
-    public JoinConstraint rightJoin(String RHSTableName) throws JoinException{
-        try{
+    public JoinConstraint rightJoin(String RHSTableName) throws JoinException,NoSuchTableException{
             type = TYPES.RIGHTJOIN;
             addTableName(RHSTableName,true);
             setRHSTableName(RHSTableName);
             //  checkStateAndThrowException();
             return joinConstraint;
-        }catch(NoSuchTableException e){
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     public void addTableName(String tableName,boolean addToChain) throws NoSuchTableException{
         if(addToChain)
@@ -90,7 +73,7 @@ public class Join{
     }
     //API to access joins
 
-    public JoinResult getResult() {
+    protected JoinResult getResult() {
         try{
             String lhsTable = getLHSTableName();
             String rhsTable = getRHSTableName();
@@ -132,11 +115,11 @@ public class Join{
                 rhsPtr = new RowGenerator(rhsTable);
             }   
             joinUtil.flush();
-            return null;
+            return jr;
         }catch(Exception e){
             e.printStackTrace();
         }
-        return null;
+        return jr;
     }
 
     public LinkedHashMap<String,Types> createNewMappingForTempFileFields(String lhsTable,String rhsTable){
