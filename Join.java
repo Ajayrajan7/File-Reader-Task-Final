@@ -4,7 +4,7 @@ public class Join{
     protected List<String> chainedTableName = new LinkedList<>();
     private String tempFileName = JoinUtil.calculatedTempFileName();
     private JoinResult jr = new JoinResult(tempFileName,chainedTableName);
-    private JoinConstraint joinConstraints;
+    private JoinConstraint joinConstraint = new JoinConstraint(jr);
     private TYPES type;
     private String LHSTableName;
     private String RHSTableName;
@@ -14,23 +14,23 @@ public class Join{
             addTableName(RHSTableName,true);
             setRHSTableName(RHSTableName);
             //  checkStateAndThrowException();
-            return new JoinConstraint(jr);
+            return joinConstraint;
         }catch(NoSuchTableException e){
-            System.out.println(e);
+            e.printStackTrace();
         }
         return null;
     }
 
-    public JoinConstraint InnerJoin(String RHSTableName) throws JoinException{
+    public JoinConstraint innerJoin(String RHSTableName) throws JoinException{
         try{
             type = TYPES.INNERJOIN;
             addTableName(RHSTableName,true);
             setRHSTableName(RHSTableName);
             
             //  checkStateAndThrowException();
-            return new JoinConstraint(jr);
+            return joinConstraint;
         }catch(NoSuchTableException e){
-            System.out.println(e);
+            e.printStackTrace();
         }
         return null;
     }
@@ -41,9 +41,9 @@ public class Join{
             addTableName(RHSTableName,true);
             setRHSTableName(RHSTableName);
             //  checkStateAndThrowException();
-            return new JoinConstraint(jr);
+            return joinConstraint;
         }catch(NoSuchTableException e){
-            System.out.println(e);
+            e.printStackTrace();
         }
         return null;
     }
@@ -80,10 +80,97 @@ public class Join{
     protected String getRHSTableName(){
         return RHSTableName;
     }
+    
+    public String getTempFileName(){
+        return tempFileName;
+    }
+
+    public TYPES getType(){
+        return type;
+    }
+    //API to access joins
+
+    public JoinResult getResult() {
+        try{
+            String lhsTable = getLHSTableName();
+            String rhsTable = getRHSTableName();
+            RowGenerator lhsPtr = new RowGenerator(lhsTable);
+            RowGenerator rhsPtr = new RowGenerator(rhsTable);
+            
+            boolean isAtleastOneRowMatched = false;
+            LinkedHashMap<String,Types> tempFileVsFieldDetails = createNewMappingForTempFileFields(lhsTable,rhsTable);
+            LinkedHashMap<String,Integer> tempFileVsSizeDetails = createNewMappingForTempFileSize(lhsTable,rhsTable);
+            
+            GetTableDetails.tablesVsFieldDetails.put(getTempFileName(),tempFileVsFieldDetails);
+            GetTableDetails.tableVsSize.put(getTempFileName(),tempFileVsSizeDetails);
+
+
+            JoinUtil joinUtil = new JoinUtil();
+            joinUtil.initializeFile(getTempFileName());
+
+            while(lhsPtr.hasNext()){
+                Row row1 = lhsPtr.next();
+                isAtleastOneRowMatched = false;
+                Row row2=null;
+                while(rhsPtr.hasNext()){
+                    row2 = rhsPtr.next();
+                    ReducerUtilJoin reducerUtilJoin = new ReducerUtilJoin();
+                    reducerUtilJoin.initialize(row1, row2, joinConstraint.getConstraintChain());
+                    if(reducerUtilJoin.parseAllCriterasAndReturnFinalBoolean()){
+                        isAtleastOneRowMatched = true;
+                        joinUtil.addToTable(lhsTable, rhsTable, getType(), true, row1.getRowDetails(), row2.getRowDetails());
+                    }
+                }
+
+                if(row2==null)   break;
+
+                //If the condtion did'nt match between two rows
+                if(!isAtleastOneRowMatched){
+                    joinUtil.addToTable(lhsTable, rhsTable, getType(), false, row1.getRowDetails(), row2.getRowDetails());
+                }
+
+                rhsPtr = new RowGenerator(rhsTable);
+            }   
+            joinUtil.flush();
+            return null;
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public LinkedHashMap<String,Types> createNewMappingForTempFileFields(String lhsTable,String rhsTable){
+        LinkedHashMap<String,Types> lhsFieldDetails = GetTableDetails.tablesVsFieldDetails.get(lhsTable);
+        LinkedHashMap<String,Types> rhsFieldDetails = GetTableDetails.tablesVsFieldDetails.get(rhsTable);
+        LinkedHashMap<String,Types> tempFileVsFieldDetails = new LinkedHashMap<>();
+        for(Map.Entry<String,Types> entry:lhsFieldDetails.entrySet()){
+            tempFileVsFieldDetails.put(lhsTable+"."+entry.getKey(), entry.getValue());
+        }
+        for(Map.Entry<String,Types> entry:rhsFieldDetails.entrySet()){
+            tempFileVsFieldDetails.put(rhsTable+"."+entry.getKey(), entry.getValue());
+        }
+        return tempFileVsFieldDetails;
+    }
+
+    public LinkedHashMap<String,Integer> createNewMappingForTempFileSize(String lhsTable,String rhsTable){
+        LinkedHashMap<String,Integer> lhsFieldDetails = GetTableDetails.tableVsSize.get(lhsTable);
+        LinkedHashMap<String,Integer> rhsFieldDetails = GetTableDetails.tableVsSize.get(rhsTable);
+        LinkedHashMap<String,Integer> tempFileVsFieldDetails = new LinkedHashMap<>();
+        int total_size=0;
+        for(Map.Entry<String,Integer> entry:lhsFieldDetails.entrySet()){
+            tempFileVsFieldDetails.put(lhsTable+"."+entry.getKey(), entry.getValue());
+            total_size+=entry.getValue();
+        }
+        for(Map.Entry<String,Integer> entry:rhsFieldDetails.entrySet()){
+            tempFileVsFieldDetails.put(rhsTable+"."+entry.getKey(), entry.getValue());
+            total_size+=entry.getValue();
+        }
+        tempFileVsFieldDetails.put("Total_Row_Size",total_size);
+        return tempFileVsFieldDetails;
+    }
+    
 
 }
-
-
 
 enum FIELDTYPES {
      LEFT_IS_FIELD_AND_RIGHT_IS_CONSTANT,
@@ -94,17 +181,10 @@ enum FIELDTYPES {
 
 
 
-/*
-API to access joins
 
-getResult() -> {
-    while(RowGenerator.get(getLHSTableName()))
-        while(Rowgenerator.get(getRHSTableName())){
-            work on rows here
-        }
-} 
 
-*/
+
+
 // JoinResult jr = Select("User1")
 //  .leftJoin("User2").on(
 //   new Field("User1","id").equals(new Field("User2","id")

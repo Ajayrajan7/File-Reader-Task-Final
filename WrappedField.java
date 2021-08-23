@@ -9,5 +9,7 @@ public class WrappedField{
     public Field getField(){
         return field;
     }
-
+    public ExpressionName getExpressionName(){
+        return expressionName;
+    }
 }

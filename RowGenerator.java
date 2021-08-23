@@ -37,18 +37,23 @@ public class RowGenerator implements RowGeneratorImpl{
 		                   rowDetails.put(key,data);
 						   break;
 		            case INTEGER :
+						if(!data.equals("null"))
 		                   rowDetails.put(key,Integer.valueOf(data));
-						   break;	             
+						break;	             
 					case FLOAT :
+						if(!data.equals("null"))	
 		                   rowDetails.put(key,Float.valueOf(data));
-						   break;
+						break;
 					case DOUBLE :
+						if(!data.equals("null"))
 		                   rowDetails.put(key,Double.valueOf(data));
-						   break;
+						break;
 					case LONG :
+						if(!data.equals("null"))
 		                   rowDetails.put(key,Long.valueOf(data));
-						   break;
+						break;
 					case BOOLEAN :
+						if(!data.equals("null"))
 		                   rowDetails.put(key,Boolean.valueOf(data));  
         		}
         		ptr+=columnVsSize.get(key);

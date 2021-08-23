@@ -1,14 +1,16 @@
 import java.util.*;
 import java.io.*;
-public class Select {
+public class Select extends Join{
    private Criteria criteria = new Criteria();
    private Row r;
    private String[] columns;
    private String tablename;
    private Set<String> columnsSet;
    private Set<String> actualCols;
+
    public Select(String tablename){
-          this.tablename = tablename;
+        setLHSTableName(tablename,true);
+        this.tablename = tablename;
    }
 
    public void columns(String... columns) throws ColumnNotFoundException{
