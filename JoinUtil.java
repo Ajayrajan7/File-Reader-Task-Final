@@ -10,7 +10,7 @@ public class JoinUtil {
     }
 
     public static String calculatedTempFileName(){
-        return Long.toHexString(Double.doubleToLongBits(Math.random()))+".txt";
+        return Long.toHexString(Double.doubleToLongBits(Math.random()));
     }
 
     public static FileOutputStream getOPStream(String filename){

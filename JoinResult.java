@@ -1,8 +1,14 @@
 import java.util.*;
 public class JoinResult extends Join implements RowGeneratorImpl{
-    private String tempTableName;
     public JoinResult(String tempTableName,List<String> chainedTableName){
-        this.tempTableName = tempTableName;
+        try{
+            setLHSTableName(tempTableName,false);
+        }
+        catch(NoSuchTableException e){
+            System.out.println("There is an error in joining the table");
+            throw new RuntimeException("Something fatal has happen");
+        }
+        
         this.chainedTableName = chainedTableName;
     }
 

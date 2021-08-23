@@ -6,12 +6,13 @@ public class Join{
     private JoinResult jr = new JoinResult(tempFileName,chainedTableName);
     private JoinConstraint joinConstraints;
     private TYPES type;
-    private String tempTableName;
-
+    private String LHSTableName;
+    private String RHSTableName;
     public JoinConstraint leftJoin(String RHSTableName) throws JoinException{
         try{
             type = TYPES.LEFTJOIN;
-            addTableName(RHSTableName);
+            addTableName(RHSTableName,true);
+            setRHSTableName(RHSTableName);
             //  checkStateAndThrowException();
             return new JoinConstraint(jr);
         }catch(NoSuchTableException e){
@@ -23,7 +24,9 @@ public class Join{
     public JoinConstraint InnerJoin(String RHSTableName) throws JoinException{
         try{
             type = TYPES.INNERJOIN;
-            addTableName(RHSTableName);
+            addTableName(RHSTableName,true);
+            setRHSTableName(RHSTableName);
+            
             //  checkStateAndThrowException();
             return new JoinConstraint(jr);
         }catch(NoSuchTableException e){
@@ -35,7 +38,8 @@ public class Join{
     public JoinConstraint rightJoin(String RHSTableName) throws JoinException{
         try{
             type = TYPES.RIGHTJOIN;
-            addTableName(RHSTableName);
+            addTableName(RHSTableName,true);
+            setRHSTableName(RHSTableName);
             //  checkStateAndThrowException();
             return new JoinConstraint(jr);
         }catch(NoSuchTableException e){
@@ -44,7 +48,8 @@ public class Join{
         return null;
     }
 
-    public void addTableName(String tableName) throws NoSuchTableException{
+    public void addTableName(String tableName,boolean addToChain) throws NoSuchTableException{
+        if(addToChain)
             chainedTableName.add(tableName);
     }
 
@@ -58,6 +63,24 @@ public class Join{
     //     }
     // }
 
+    public void setLHSTableName(String LHSTableName,boolean addToChain) throws NoSuchTableException{
+        this.LHSTableName = LHSTableName;
+        addTableName(LHSTableName,addToChain);
+
+    }
+
+    public void setRHSTableName(String RHSTableName){
+        this.RHSTableName = RHSTableName;
+    }
+
+    public String getLHSTableName(){
+        return LHSTableName;
+    }
+
+    public String getRHSTableName(){
+        return RHSTableName;
+    }
+
 }
 
 
@@ -70,6 +93,18 @@ enum FIELDTYPES {
 }
 
 
+
+/*
+API to access joins
+
+getResult() -> {
+    while(RowGenerator.get(getLHSTableName()))
+        while(Rowgenerator.get(getRHSTableName())){
+            work on rows here
+        }
+} 
+
+*/
 // JoinResult jr = Select("User1")
 //  .leftJoin("User2").on(
 //   new Field("User1","id").equals(new Field("User2","id")
