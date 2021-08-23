@@ -1,5 +1,4 @@
 import java.util.*;
-import java.io.*;
 
 public class Join{
     protected List<String> chainedTableName = new LinkedList<>();
@@ -7,24 +6,42 @@ public class Join{
     private JoinResult jr = new JoinResult(tempFileName,chainedTableName);
     private JoinConstraint joinConstraints;
     private TYPES type;
-    private String tempTableName ;
+    private String tempTableName;
 
     public JoinConstraint leftJoin(String RHSTableName) throws JoinException{
-         type = TYPES.LEFTJOIN;
-        //  checkStateAndThrowException();
-         return new JoinConstraint(jr);
+        try{
+            type = TYPES.LEFTJOIN;
+            addTableName(RHSTableName);
+            //  checkStateAndThrowException();
+            return new JoinConstraint(jr);
+        }catch(NoSuchTableException e){
+            System.out.println(e);
+        }
+        return null;
     }
 
     public JoinConstraint InnerJoin(String RHSTableName) throws JoinException{
-        type = TYPES.INNERJOIN;
-        // checkStateAndThrowException();
-        return new JoinConstraint(jr);
+        try{
+            type = TYPES.INNERJOIN;
+            addTableName(RHSTableName);
+            //  checkStateAndThrowException();
+            return new JoinConstraint(jr);
+        }catch(NoSuchTableException e){
+            System.out.println(e);
+        }
+        return null;
     }
 
     public JoinConstraint rightJoin(String RHSTableName) throws JoinException{
-        type = TYPES.RIGHTJOIN;
-        // checkStateAndThrowException();
-        return new JoinConstraint(jr);
+        try{
+            type = TYPES.RIGHTJOIN;
+            addTableName(RHSTableName);
+            //  checkStateAndThrowException();
+            return new JoinConstraint(jr);
+        }catch(NoSuchTableException e){
+            System.out.println(e);
+        }
+        return null;
     }
 
     public void addTableName(String tableName) throws NoSuchTableException{
