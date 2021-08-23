@@ -32,7 +32,7 @@ public class JoinConstraint{
 
 
 
-   public List<WrappedField> getConstaintChain(){
+   public List<WrappedField> getConstraintChain(){
        return constrainChain;
    }
 

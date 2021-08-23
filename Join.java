@@ -1,11 +1,10 @@
-import java.lang.reflect.Type;
 import java.util.*;
 
 public class Join{
     protected List<String> chainedTableName = new LinkedList<>();
     private String tempFileName = JoinUtil.calculatedTempFileName();
     private JoinResult jr = new JoinResult(tempFileName,chainedTableName);
-    private JoinConstraint joinConstraints;
+    private JoinConstraint joinConstraint = new JoinConstraint(jr);
     private TYPES type;
     private String LHSTableName;
     private String RHSTableName;
@@ -15,21 +14,21 @@ public class Join{
             addTableName(RHSTableName,true);
             setRHSTableName(RHSTableName);
             //  checkStateAndThrowException();
-            return new JoinConstraint(jr);
+            return joinConstraint;
         }catch(NoSuchTableException e){
             e.printStackTrace();
         }
         return null;
     }
 
-    public JoinConstraint InnerJoin(String RHSTableName) throws JoinException{
+    public JoinConstraint innerJoin(String RHSTableName) throws JoinException{
         try{
             type = TYPES.INNERJOIN;
             addTableName(RHSTableName,true);
             setRHSTableName(RHSTableName);
             
             //  checkStateAndThrowException();
-            return new JoinConstraint(jr);
+            return joinConstraint;
         }catch(NoSuchTableException e){
             e.printStackTrace();
         }
@@ -42,7 +41,7 @@ public class Join{
             addTableName(RHSTableName,true);
             setRHSTableName(RHSTableName);
             //  checkStateAndThrowException();
-            return new JoinConstraint(jr);
+            return joinConstraint;
         }catch(NoSuchTableException e){
             e.printStackTrace();
         }
@@ -92,46 +91,52 @@ public class Join{
     //API to access joins
 
     public JoinResult getResult() {
-        String lhsTable = getLHSTableName();
-        String rhsTable = getRHSTableName();
-        RowGenerator lhsPtr = new RowGenerator(lhsTable);
-        RowGenerator rhsPtr = new RowGenerator(rhsTable);
-        
-        boolean isAtleastOneRowMatched = false;
-        LinkedHashMap<String,Types> tempFileVsFieldDetails = createNewMappingForTempFileFields(lhsTable,rhsTable);
-        LinkedHashMap<String,Integer> tempFileVsSizeDetails = createNewMappingForTempFileSize(lhsTable,rhsTable);
-        
-        GetTableDetails.tablesVsFieldDetails.put(getTempFileName(),tempFileVsFieldDetails);
-        GetTableDetails.tableVsSize.put(getTempFileName(),tempFileVsSizeDetails);
+        try{
+            String lhsTable = getLHSTableName();
+            String rhsTable = getRHSTableName();
+            RowGenerator lhsPtr = new RowGenerator(lhsTable);
+            RowGenerator rhsPtr = new RowGenerator(rhsTable);
+            
+            boolean isAtleastOneRowMatched = false;
+            LinkedHashMap<String,Types> tempFileVsFieldDetails = createNewMappingForTempFileFields(lhsTable,rhsTable);
+            LinkedHashMap<String,Integer> tempFileVsSizeDetails = createNewMappingForTempFileSize(lhsTable,rhsTable);
+            
+            GetTableDetails.tablesVsFieldDetails.put(getTempFileName(),tempFileVsFieldDetails);
+            GetTableDetails.tableVsSize.put(getTempFileName(),tempFileVsSizeDetails);
 
 
-        JoinUtil joinUtil = new JoinUtil();
-        joinUtil.initializeFile(getTempFileName());
+            JoinUtil joinUtil = new JoinUtil();
+            joinUtil.initializeFile(getTempFileName());
 
-        while(lhsPtr.hasNext()){
-            Row row1 = lhsPtr.next();
-            isAtleastOneRowMatched = false;
-            Row row2=null;
-            while(rhsPtr.hasNext()){
-                row2 = rhsPtr.next();
-                ReducerUtilJoin reducerUtilJoin = new ReducerUtilJoin();
-                reducerUtilJoin.initialize(row1, row2, getConstaintChain());
-                if(reducerUtilJoin.parseAllCriterasAndReturnFinalBoolean()){
-                    isAtleastOneRowMatched = true;
-                    joinUtil.addToTable(lhsTable, rhsTable, getType(), true, row1.getRowDetails(), row2.getRowDetails());
+            while(lhsPtr.hasNext()){
+                Row row1 = lhsPtr.next();
+                isAtleastOneRowMatched = false;
+                Row row2=null;
+                while(rhsPtr.hasNext()){
+                    row2 = rhsPtr.next();
+                    ReducerUtilJoin reducerUtilJoin = new ReducerUtilJoin();
+                    reducerUtilJoin.initialize(row1, row2, joinConstraint.getConstraintChain());
+                    if(reducerUtilJoin.parseAllCriterasAndReturnFinalBoolean()){
+                        isAtleastOneRowMatched = true;
+                        joinUtil.addToTable(lhsTable, rhsTable, getType(), true, row1.getRowDetails(), row2.getRowDetails());
+                    }
                 }
-            }
 
-            if(row2==null)   break;
+                if(row2==null)   break;
 
-            //If the condtion did'nt match between two rows
-            if(!isAtleastOneRowMatched){
-                joinUtil.addToTable(lhsTable, rhsTable, getType(), false, row1.getRowDetails(), row2.getRowDetails());
-            }
+                //If the condtion did'nt match between two rows
+                if(!isAtleastOneRowMatched){
+                    joinUtil.addToTable(lhsTable, rhsTable, getType(), false, row1.getRowDetails(), row2.getRowDetails());
+                }
 
-            rhsPtr = new RowGenerator(rhsTable);
-        }   
-        joinUtil.flush();
+                rhsPtr = new RowGenerator(rhsTable);
+            }   
+            joinUtil.flush();
+            return null;
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public LinkedHashMap<String,Types> createNewMappingForTempFileFields(String lhsTable,String rhsTable){
