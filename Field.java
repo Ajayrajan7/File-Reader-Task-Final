@@ -15,7 +15,7 @@ public class Field{
        if(tableName == null || fieldName == null) throw new IllegalArgumentException("tableName or fieldName shouldn't be null");
     }
 
-
+    
     public Field equals(Object RHSFieldOrConstValue) throws IllegalArgumentException{
         operator = Operator.EQU;
         castGivenArgument(RHSFieldOrConstValue);

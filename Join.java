@@ -30,7 +30,7 @@ public class Join{
             setRHSTableName(RHSTableName);
             //  checkStateAndThrowException();
             return joinConstraint;
-
+    }
     public void addTableName(String tableName,boolean addToChain) throws NoSuchTableException{
         if(addToChain)
             chainedTableName.add(tableName);

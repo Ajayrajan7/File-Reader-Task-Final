@@ -36,8 +36,6 @@ public class JoinResult extends Join implements RowGeneratorImpl{
             return results;
        }catch(RowExhausedException e){
            System.out.println(e);
-       }catch(FileNotFoundException e){
-           System.out.println(e);
        }
        return null;
         
