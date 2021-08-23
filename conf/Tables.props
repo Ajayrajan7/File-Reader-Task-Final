@@ -1,2 +1,2 @@
-users=user_id:Integer,name:String,email:String,password:String
-log_details=user_id:Integer,fileName:String
+table1=id:Integer,name:String,email:String,password:String
+table2=user_id:Integer,location:String

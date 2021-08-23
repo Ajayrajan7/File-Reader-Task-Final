@@ -5,10 +5,11 @@ public class MainCode{
 		try{
 			GetTableDetails.initialize(" ");
 
-			// insertRecords("users");
-			deleteAllRecords("users");
-			getAllRecords("users");
-			// getAllRecordsWithQuery("users");
+			insertRecords("table1");
+			// deleteAllRecords("table1");
+			getAllRecords("table1");
+			// performJoin();
+			// getAllRecordsWithQuery("table1");
 			
 		}catch(Exception e){
 			System.out.println(e);
@@ -25,7 +26,7 @@ public class MainCode{
 			System.out.println("\nResults:");
 			for(Row r:results){
 				System.out.println("\nRecord "+i);
-				System.out.println("user_id: "+r.getInt("user_id"));
+				System.out.println("id: "+r.getInt("id"));
 				System.out.println("name: "+r.getString("name"));
 				System.out.println("email: "+r.getString("email"));
 				i++;
@@ -89,44 +90,44 @@ public class MainCode{
 			HashMap<String,Object> data = new HashMap<>();
 			
 			data.put("password","samp");
-			data.put("user_id",5);
-			data.put("email","Temp1@gmail.com");
-			data.put("name","Temp 1");
+			data.put("id",1);
+			data.put("email","Ajay@gmail.com");
+			data.put("name","Ajay Rajan");
 			list.add(data);
 
 			HashMap<String,Object> data2 = new HashMap<>();
 			
 			data2.put("password","samp2");
-			data2.put("user_id",6);
-			data2.put("email","Temp2@gmail.com");
-			data2.put("name","Temp 2");
+			data2.put("id",2);
+			data2.put("email","Ajith@gmail.com");
+			data2.put("name","Ajith");
 			list.add(data2);
 
 			HashMap<String,Object> data3 = new HashMap<>();
 			
 			data3.put("password","samp3");
-			data3.put("user_id",7);
-			data3.put("email","Temp3@gmail.com");
-			data3.put("name","Temp 3");
+			data3.put("id",3);
+			data3.put("email","Ashok@gmail.com");
+			data3.put("name","Ashok K");
 			list.add(data3);
 
 			HashMap<String,Object> data4 = new HashMap<>();
 			
 			data4.put("password","samp4");
-			data4.put("user_id",8);
-			data4.put("email","Temp4@gmail.com");
-			data4.put("name","Temp 4");
+			data4.put("id",4);
+			data4.put("email","Arun@gmail.com");
+			data4.put("name","Arun kumar");
 			list.add(data4);
 
 			HashMap<String,Object> data5 = new HashMap<>();
 			
 			data5.put("password","samp5");
-			data5.put("user_id",9);
-			data5.put("email","Temp5@gmail.com");
-			data5.put("name","Temp 5");
+			data5.put("id",9);
+			data5.put("email","chella@gmail.com");
+			data5.put("name","Chellathurai");
 			list.add(data5);
 
-			Insert r = new Insert("users",list);
+			Insert r = new Insert(tablename,list);
 			r.addToTable();
 
 			System.out.println("Insertion done!");
@@ -134,5 +135,19 @@ public class MainCode{
 			System.out.println(e);
 		}
 		
+	}
+	
+	public static void performJoin(){
+		try{
+			JoinResult jr = (new Select("table1")).innerJoin("table2").
+			on(new Field("table1","id").equals(new Field("table2","user_id"))).getResult();
+			List<Row>  rows = jr.getRows();
+			for(Row r:rows){
+				System.out.println("Name:" + r.getString("table1.name"));
+				System.out.println("Location: "+r.getString("table2.location"));
+			}
+		}catch(Exception e){
+			System.out.println(e);
+		}
 	}
 }

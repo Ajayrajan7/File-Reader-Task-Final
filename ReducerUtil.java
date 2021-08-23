@@ -18,11 +18,9 @@ class ReducerUtil {
             POSITION++;
         }
         return LHS;
-        
      }
  
-     }
-     }public  boolean reduce(boolean LHS,WrappedCondition RHS){
+     public  boolean reduce(boolean LHS,WrappedCondition RHS){
          final String USERKEY = RHS.getExpression().getLHSKEY();
          final boolean RHSSTATUS = RHS.getExpression().evaluate((Comparable<Object>)row.getColumn(USERKEY));
          switch(RHS.getExpressionName()){
@@ -32,5 +30,6 @@ class ReducerUtil {
                  return LHS || RHSSTATUS;
             default :
                  return false;
-         
+        }
+    }
 }
