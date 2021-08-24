@@ -44,9 +44,9 @@ public class Insert{
 
     private void  checkOrderAndArrangeIfNot(String tableName,HashMap<String,Object> map){
     	LinkedHashMap<String,Object> finalOrder = new LinkedHashMap<>();
-    	LinkedHashMap<String,Types> realOrder = GetTableDetails.tablesVsFieldDetails.get(tableName);
+    	LinkedHashMap<String,DataTypes> realOrder = GetTableDetails.tablesVsFieldDetails.get(tableName);
 
-    	for(Map.Entry<String,Types> entry:realOrder.entrySet()){
+    	for(Map.Entry<String,DataTypes> entry:realOrder.entrySet()){
     		if(map.get(entry.getKey())!=null){
     			// if(entry.getValue().toString().equals("class java.lang.String")){
 	    		// 	String val = (String)map.get(entry.getKey());

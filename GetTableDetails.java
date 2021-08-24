@@ -3,7 +3,7 @@ import java.io.*;
 public class GetTableDetails {
     private static String[] FIELDS = new String[]{"STRING","INTEGER","LONG","DOUBLE","FLOAT","BOOLEAN"};
     private static final Set Fields = new HashSet<String>(Arrays.asList(FIELDS));
-    public static HashMap<String,LinkedHashMap<String,Types>> tablesVsFieldDetails = new HashMap<>();
+    public static HashMap<String,LinkedHashMap<String,DataTypes>> tablesVsFieldDetails = new HashMap<>();
     public static HashMap<String,LinkedHashMap<String,Integer>> tableVsSize = new HashMap<>();
     static String dataPath="";
     static String confPath="";
@@ -54,7 +54,7 @@ public class GetTableDetails {
         }
     }
 
-    public static LinkedHashMap<String,Types> getFieldVsTypes(String tableName){
+    public static LinkedHashMap<String,DataTypes> getFieldVsTypes(String tableName){
         return tablesVsFieldDetails.get(tableName);
     }
 
@@ -74,8 +74,8 @@ public class GetTableDetails {
           }
     }
 
-    private static LinkedHashMap<String,Types> getFieldVsTypes_(String tableBuffer)throws IllegalArgumentException,ClassNotFoundException{
-        LinkedHashMap<String,Types> fieldVsTypes = new LinkedHashMap<String,Types>();
+    private static LinkedHashMap<String,DataTypes> getFieldVsTypes_(String tableBuffer)throws IllegalArgumentException,ClassNotFoundException{
+        LinkedHashMap<String,DataTypes> fieldVsTypes = new LinkedHashMap<String,DataTypes>();
         String[] values = null ;
         for(String entry : tableBuffer.split(",")){
              values = entry.split(":");

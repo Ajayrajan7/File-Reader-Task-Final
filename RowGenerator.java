@@ -7,7 +7,7 @@ public class RowGenerator implements RowGeneratorImpl{
 	private RandomAccessFile raf = null;
 	private byte[] buffer;
 	private LinkedHashMap<String,Integer> columnVsSize;
-	private LinkedHashMap<String,Types> tablesVsFieldDetails;
+	private LinkedHashMap<String,DataTypes> tablesVsFieldDetails;
 	private boolean EXHAUSTED = false;
 
 	public RowGenerator(String tableName) throws FileNotFoundException{

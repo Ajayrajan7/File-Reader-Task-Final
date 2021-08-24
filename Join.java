@@ -81,7 +81,7 @@ public class Join{
             RowGenerator rhsPtr = new RowGenerator(rhsTable);
             
             boolean isAtleastOneRowMatched = false;
-            LinkedHashMap<String,Types> tempFileVsFieldDetails = createNewMappingForTempFileFields(lhsTable,rhsTable);
+            LinkedHashMap<String,DataTypes> tempFileVsFieldDetails = createNewMappingForTempFileFields(lhsTable,rhsTable);
             LinkedHashMap<String,Integer> tempFileVsSizeDetails = createNewMappingForTempFileSize(lhsTable,rhsTable);
             
             GetTableDetails.tablesVsFieldDetails.put(getTempFileName(),tempFileVsFieldDetails);
@@ -122,14 +122,14 @@ public class Join{
         return jr;
     }
 
-    public LinkedHashMap<String,Types> createNewMappingForTempFileFields(String lhsTable,String rhsTable){
-        LinkedHashMap<String,Types> lhsFieldDetails = GetTableDetails.tablesVsFieldDetails.get(lhsTable);
-        LinkedHashMap<String,Types> rhsFieldDetails = GetTableDetails.tablesVsFieldDetails.get(rhsTable);
-        LinkedHashMap<String,Types> tempFileVsFieldDetails = new LinkedHashMap<>();
-        for(Map.Entry<String,Types> entry:lhsFieldDetails.entrySet()){
+    public LinkedHashMap<String,DataTypes> createNewMappingForTempFileFields(String lhsTable,String rhsTable){
+        LinkedHashMap<String,DataTypes> lhsFieldDetails = GetTableDetails.tablesVsFieldDetails.get(lhsTable);
+        LinkedHashMap<String,DataTypes> rhsFieldDetails = GetTableDetails.tablesVsFieldDetails.get(rhsTable);
+        LinkedHashMap<String,DataTypes> tempFileVsFieldDetails = new LinkedHashMap<>();
+        for(Map.Entry<String,DataTypes> entry:lhsFieldDetails.entrySet()){
             tempFileVsFieldDetails.put(lhsTable+"."+entry.getKey(), entry.getValue());
         }
-        for(Map.Entry<String,Types> entry:rhsFieldDetails.entrySet()){
+        for(Map.Entry<String,DataTypes> entry:rhsFieldDetails.entrySet()){
             tempFileVsFieldDetails.put(rhsTable+"."+entry.getKey(), entry.getValue());
         }
         return tempFileVsFieldDetails;

@@ -36,7 +36,7 @@ public class JoinUtil {
         
     }
 
-    public void addToTable(String tablename1,String tablename2,TYPES type,boolean isMatched,LinkedHashMap<String,Object> lhsData,LinkedHashMap<String,Object> rhsData){
+    public void addToTable(String tablename1,String tablename2,JOINTYPES type,boolean isMatched,LinkedHashMap<String,Object> lhsData,LinkedHashMap<String,Object> rhsData){
         try{
             if(isMatched){
                 writeData(lhsData,tablename1,true);
