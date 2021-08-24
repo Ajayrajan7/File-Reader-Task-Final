@@ -52,8 +52,8 @@ public class JoinUtil {
                         break;
                     case RIGHTJOIN:
                         out.print(1);
-                        writeData(lhsData,tablename1,false);
-                        writeData(rhsData,tablename2,true);
+                        writeData(lhsData,tablename1,true);
+                        writeData(rhsData,tablename2,false);
                         out.print("\n");
                         break;
                     case INNERJOIN:

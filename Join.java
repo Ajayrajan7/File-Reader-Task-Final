@@ -77,7 +77,10 @@ public class Join{
         try{
             String lhsTable = getLHSTableName();
             String rhsTable = getRHSTableName();
-            System.out.println(lhsTable+" "+rhsTable);
+            if(getType() == JOINTYPES.RIGHTJOIN){
+                rhsTable = getLHSTableName();
+                lhsTable = getRHSTableName();
+            }
             RowGenerator lhsPtr = new RowGenerator(lhsTable);
             RowGenerator rhsPtr = new RowGenerator(rhsTable);
             
@@ -99,7 +102,11 @@ public class Join{
                 while(rhsPtr.hasNext()){
                     row2 = rhsPtr.next();
                     ReducerUtilJoin reducerUtilJoin = new ReducerUtilJoin();
-                    reducerUtilJoin.initialize(row1, row2, joinConstraint.getConstraintChain());
+                    if(getType() == JOINTYPES.RIGHTJOIN)
+                        reducerUtilJoin.initialize(row2, row1, joinConstraint.getConstraintChain());
+                    else
+                        reducerUtilJoin.initialize(row1, row2, joinConstraint.getConstraintChain());
+                        
                     if(reducerUtilJoin.parseAllCriterasAndReturnFinalBoolean()){
                         isAtleastOneRowMatched = true;
                         System.out.println("Join Condition satisfies");
@@ -130,10 +137,16 @@ public class Join{
         LinkedHashMap<String,DataTypes> rhsFieldDetails = GetTableDetails.tablesVsFieldDetails.get(rhsTable);
         LinkedHashMap<String,DataTypes> tempFileVsFieldDetails = new LinkedHashMap<>();
         for(Map.Entry<String,DataTypes> entry:lhsFieldDetails.entrySet()){
-            tempFileVsFieldDetails.put(lhsTable+"."+entry.getKey(), entry.getValue());
+            if(!entry.getKey().contains("."))
+                tempFileVsFieldDetails.put(lhsTable+"."+entry.getKey(), entry.getValue());
+            else 
+                tempFileVsFieldDetails.put(entry.getKey(), entry.getValue());
         }
         for(Map.Entry<String,DataTypes> entry:rhsFieldDetails.entrySet()){
-            tempFileVsFieldDetails.put(rhsTable+"."+entry.getKey(), entry.getValue());
+            if(!entry.getKey().contains("."))
+                tempFileVsFieldDetails.put(rhsTable+"."+entry.getKey(), entry.getValue());
+            else
+                tempFileVsFieldDetails.put(entry.getKey(), entry.getValue());
         }
         return tempFileVsFieldDetails;
     }
@@ -144,11 +157,17 @@ public class Join{
         LinkedHashMap<String,Integer> tempFileVsFieldDetails = new LinkedHashMap<>();
         int total_size=0;
         for(Map.Entry<String,Integer> entry:lhsFieldDetails.entrySet()){
-            tempFileVsFieldDetails.put(lhsTable+"."+entry.getKey(), entry.getValue());
+            if(!entry.getKey().contains("."))
+                tempFileVsFieldDetails.put(lhsTable+"."+entry.getKey(), entry.getValue());
+            else
+                tempFileVsFieldDetails.put(entry.getKey(), entry.getValue());
         }
         total_size+=lhsFieldDetails.get("Total_Row_Size");
         for(Map.Entry<String,Integer> entry:rhsFieldDetails.entrySet()){
-            tempFileVsFieldDetails.put(rhsTable+"."+entry.getKey(), entry.getValue());
+            if(!entry.getKey().contains("."))
+                tempFileVsFieldDetails.put(rhsTable+"."+entry.getKey(), entry.getValue());
+            else
+                tempFileVsFieldDetails.put(entry.getKey(), entry.getValue());
         }
         total_size+=rhsFieldDetails.get("Total_Row_Size");
         tempFileVsFieldDetails.put("Total_Row_Size",total_size);
