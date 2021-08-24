@@ -80,8 +80,8 @@ public class Field{
     }
 
     private boolean fieldVsFieldEval(){
-        Comparable<Object> lhsValue = (Comparable)lhs.getColumn(fieldName_self); //can be changed based on "User1.Id" or "Id".
-        Comparable<Object> rhsValue = (Comparable)rhs.getColumn(fieldName_another);
+        Comparable<Object> lhsValue = (Comparable)lhs.getColumn(fieldName_self)==null?(Comparable)lhs.getColumn(tableName_self+"."+fieldName_self):(Comparable)lhs.getColumn(fieldName_self); //can be changed based on "User1.Id" or "Id".
+        Comparable<Object> rhsValue = (Comparable)rhs.getColumn(fieldName_another)==null?(Comparable)rhs.getColumn(tableName_another+"."+fieldName_another):(Comparable)rhs.getColumn(fieldName_another);
         if(lhsValue == null || rhsValue == null) return false;
         switch(operator){
             case GT :

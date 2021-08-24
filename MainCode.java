@@ -148,7 +148,7 @@ public class MainCode{
 			// 	System.out.println("Name:" + r.getString("table1.name"));
 			// 	System.out.println("Location: "+r.getString("table2.location"));
 			// }
-			JoinResult jr2 = jr.innerJoin("table3").on(new Field("table3", "city").eq(new Field("table2", "location"))).getResult();
+			JoinResult jr2 = jr.innerJoin("table3").on(new Field("table2", "location").eq(new Field("table3", "city"))).getResult();
 			List<Row> row2 = jr2.getRows();
 			for(Row r:row2){
 				System.out.println(r.getRowDetails());
