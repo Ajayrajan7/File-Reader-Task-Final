@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 public class JoinResult extends Join{
@@ -28,7 +29,7 @@ public class JoinResult extends Join{
     public List<Row> getRows(){
         String tempTableName = getLHSTableName();
         try{
-            RowGenerator rowGen = new RowGenerator(tempTableName);
+            RowGenerator rowGen = new RowGenerator(tempTableName,true);
             List<Row> results = new ArrayList<>();
             while(rowGen.hasNext()){
                 Row r = rowGen.next();

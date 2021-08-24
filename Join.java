@@ -77,8 +77,8 @@ public class Join{
         try{
             String lhsTable = getLHSTableName();
             String rhsTable = getRHSTableName();
-            RowGenerator lhsPtr = new RowGenerator(lhsTable);
-            RowGenerator rhsPtr = new RowGenerator(rhsTable);
+            RowGenerator lhsPtr = new RowGenerator(lhsTable,false);
+            RowGenerator rhsPtr = new RowGenerator(rhsTable,false);
             
             boolean isAtleastOneRowMatched = false;
             LinkedHashMap<String,DataTypes> tempFileVsFieldDetails = createNewMappingForTempFileFields(lhsTable,rhsTable);
@@ -101,6 +101,7 @@ public class Join{
                     reducerUtilJoin.initialize(row1, row2, joinConstraint.getConstraintChain());
                     if(reducerUtilJoin.parseAllCriterasAndReturnFinalBoolean()){
                         isAtleastOneRowMatched = true;
+                        System.out.println("Join Condition satisfies");
                         joinUtil.addToTable(lhsTable, rhsTable, getType(), true, row1.getRowDetails(), row2.getRowDetails());
                     }
                 }
@@ -109,15 +110,16 @@ public class Join{
 
                 //If the condtion did'nt match between two rows
                 if(!isAtleastOneRowMatched){
+                    System.out.println("Join condition not satisfied");
                     joinUtil.addToTable(lhsTable, rhsTable, getType(), false, row1.getRowDetails(), row2.getRowDetails());
                 }
 
-                rhsPtr = new RowGenerator(rhsTable);
+                rhsPtr = new RowGenerator(rhsTable,false);
             }   
             joinUtil.flush();
             return new JoinResult(tempFileName,chainedTableName);
         }catch(Exception e){
-            e.printStackTrace();
+            System.out.println(e);
         }
         return new JoinResult(tempFileName,chainedTableName);
     }
@@ -142,12 +144,12 @@ public class Join{
         int total_size=0;
         for(Map.Entry<String,Integer> entry:lhsFieldDetails.entrySet()){
             tempFileVsFieldDetails.put(lhsTable+"."+entry.getKey(), entry.getValue());
-            total_size+=entry.getValue();
         }
+        total_size+=lhsFieldDetails.get("Total_Row_Size");
         for(Map.Entry<String,Integer> entry:rhsFieldDetails.entrySet()){
             tempFileVsFieldDetails.put(rhsTable+"."+entry.getKey(), entry.getValue());
-            total_size+=entry.getValue();
         }
+        total_size+=rhsFieldDetails.get("Total_Row_Size");
         tempFileVsFieldDetails.put("Total_Row_Size",total_size);
         return tempFileVsFieldDetails;
     }

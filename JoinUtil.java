@@ -39,21 +39,21 @@ public class JoinUtil {
     public void addToTable(String tablename1,String tablename2,JOINTYPES type,boolean isMatched,LinkedHashMap<String,Object> lhsData,LinkedHashMap<String,Object> rhsData){
         try{
             if(isMatched){
+                out.print(1);
                 writeData(lhsData,tablename1,true);
-                out.print("\n");
                 writeData(rhsData,tablename2,true);
                 out.print("\n");
             }else{
                 switch(type){
                     case LEFTJOIN:
+                        out.print(1);
                         writeData(lhsData,tablename1,true);
-                        out.print("\n");
                         writeData(rhsData,tablename2,false);
                         out.print("\n");
                         break;
                     case RIGHTJOIN:
+                        out.print(1);
                         writeData(lhsData,tablename1,false);
-                        out.print("\n");
                         writeData(rhsData,tablename2,true);
                         out.print("\n");
                         break;
@@ -69,7 +69,7 @@ public class JoinUtil {
 
     public void writeData(LinkedHashMap<String,Object> map,String tablename,boolean canWrite){
         try{
-            out.print(1);
+            
             for(Map.Entry<String,Object> entry:map.entrySet()){
                 if(canWrite){
                     out.print(Insert.padData(tablename,entry.getKey(),entry.getValue()));
@@ -84,9 +84,9 @@ public class JoinUtil {
     } 
     public void flush(){
         try{
-            fw.close();
-            bw.close();
             out.close();
+    		bw.close();
+    		fw.close();
         }catch(Exception e){
             e.printStackTrace();
         }

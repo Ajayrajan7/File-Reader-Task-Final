@@ -18,7 +18,7 @@ public class Update{
 
    public boolean executeQuery(){
        try{
-            RowGenerator rowGen = new RowGenerator(tablename);
+            RowGenerator rowGen = new RowGenerator(tablename,false);
             while(rowGen.hasNext()){
                 this.r = rowGen.next();
                 ReducerUtil reducerUtil = new ReducerUtil();

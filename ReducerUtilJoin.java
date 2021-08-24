@@ -3,7 +3,7 @@ public class ReducerUtilJoin {
     private  Row row1;
     private  Row row2;
     private List<WrappedField> constrainChain;
-    private boolean state = false;
+    private boolean state = true;
 
     public void initialize(Row row1, Row row2, List<WrappedField> constrainChain){
         this.row1 = row1;

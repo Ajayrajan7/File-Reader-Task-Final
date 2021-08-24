@@ -139,9 +139,11 @@ public class MainCode{
 	
 	public static void performJoin(){
 		try{
-			JoinResult jr = new Select("table1").innerJoin("table2").
+			JoinResult jr = new Select("table1").rightJoin("table2").
 			on(new Field("table1","id").eq(new Field("table2","user_id"))).getResult();
+			System.out.println("Join done:");
 			List<Row>  rows = jr.getRows();
+			System.out.println("\n Join Results::");
 			for(Row r:rows){
 				System.out.println("Name:" + r.getString("table1.name"));
 				System.out.println("Location: "+r.getString("table2.location"));

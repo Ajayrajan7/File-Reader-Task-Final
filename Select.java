@@ -33,7 +33,7 @@ public class Select extends Join{
 
    public List<Row> executeQuery(){
        try{
-            RowGenerator rowGen = new RowGenerator(tablename);
+            RowGenerator rowGen = new RowGenerator(tablename,false);
             List<Row> results = new ArrayList<>();
             while(rowGen.hasNext()){
                 this.r = rowGen.next();

@@ -10,9 +10,12 @@ public class RowGenerator implements RowGeneratorImpl{
 	private LinkedHashMap<String,DataTypes> tablesVsFieldDetails;
 	private boolean EXHAUSTED = false;
 
-	public RowGenerator(String tableName) throws FileNotFoundException{
+	public RowGenerator(String tableName,boolean fetchFromTemp) throws FileNotFoundException{
 		this.tableName=tableName;
-		this.raf = FileUtil.getRandomAccessInstance(tableName);
+		if(fetchFromTemp)
+			this.raf = FileUtil.getRandomAccessInstance("temp"+File.separator+tableName);
+		else
+			this.raf = FileUtil.getRandomAccessInstance(tableName);
 		this.columnVsSize = GetTableDetails.tableVsSize.get(tableName);
 		this.tablesVsFieldDetails = GetTableDetails.tablesVsFieldDetails.get(tableName);
 		this.total_row_size=columnVsSize.get("Total_Row_Size")+2;
@@ -28,7 +31,7 @@ public class RowGenerator implements RowGeneratorImpl{
 			//Iterating each column in the buffer.
 			for(String key:tablesVsFieldDetails.keySet()){
 				String data = (new String(buffer,ptr,columnVsSize.get(key)-1)).trim();
-			 DataTypes type = tablesVsFieldDetails.get(key);
+			 	DataTypes type = tablesVsFieldDetails.get(key);
 				// System.out.println(ptr+" "+columnVsSize.get(key));
 				// System.out.println(key+" "+data+" "+type);
 				//Finding the type of the current column and typecasting it to object type
@@ -86,7 +89,7 @@ public class RowGenerator implements RowGeneratorImpl{
 			}
       		return true;
 	   	} catch(EOFException e){
-	      	e.printStackTrace();;
+	      	System.out.println(e);
 			try {
 				FileUtil.releaseFile();
 				raf.close();

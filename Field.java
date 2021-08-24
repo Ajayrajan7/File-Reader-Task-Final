@@ -85,7 +85,7 @@ public class Field{
         if(lhsValue == null || rhsValue == null) return false;
         switch(operator){
             case GT :
-                  return lhsValue.compareTo(rhsValue) == 1 ;
+                  return lhsValue.compareTo(rhsValue) == 1;
             case EQU :
                   return lhsValue.compareTo(rhsValue) == 0;
             case GTE :
