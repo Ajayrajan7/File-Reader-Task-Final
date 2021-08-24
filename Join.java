@@ -3,7 +3,7 @@ import java.util.*;
 public class Join{
     protected List<String> chainedTableName = new LinkedList<>();
     private String tempFileName = JoinUtil.calculatedTempFileName();
-    private JoinResult jr = new JoinResult(tempFileName,chainedTableName);
+    // private JoinResult jr = ;
     private JoinConstraint joinConstraint = new JoinConstraint(this);
     private JOINTYPES type;
     private String LHSTableName;
@@ -115,11 +115,11 @@ public class Join{
                 rhsPtr = new RowGenerator(rhsTable);
             }   
             joinUtil.flush();
-            return jr;
+            return new JoinResult(tempFileName,chainedTableName);
         }catch(Exception e){
             e.printStackTrace();
         }
-        return jr;
+        return new JoinResult(tempFileName,chainedTableName);
     }
 
     public LinkedHashMap<String,DataTypes> createNewMappingForTempFileFields(String lhsTable,String rhsTable){
