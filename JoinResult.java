@@ -36,9 +36,9 @@ public class JoinResult extends Join{
             }   
             return results;
        }catch(RowExhausedException e){
-           System.out.println(e);
+           e.printStackTrace();;
        }catch(FileNotFoundException e){
-           System.out.println(e);
+           e.printStackTrace();;
        }
        return null;
         

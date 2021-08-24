@@ -50,9 +50,9 @@ public class Select extends Join{
             }   
             return results;
        }catch(RowExhausedException e){
-           System.out.println(e);
+           e.printStackTrace();;
        }catch(FileNotFoundException e){
-           System.out.println(e);
+           e.printStackTrace();;
        }
        return null;
    }
@@ -64,7 +64,7 @@ public class Select extends Join{
                     r.getRowDetails().remove(col);
            }
        }catch(Exception e){
-           System.out.println(e);
+           e.printStackTrace();;
        }
    }
 }

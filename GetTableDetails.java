@@ -31,7 +31,7 @@ public class GetTableDetails {
                 f.createNewFile();
                 System.out.println("New file is created");
             }catch(Exception e){
-                System.out.println(e);
+                e.printStackTrace();;
             }
         }else{
             // System.out.println("File exists already");
@@ -47,7 +47,7 @@ public class GetTableDetails {
                 p.store(new FileOutputStream(confPath+File.separator+key+".props"),"Props file for tracking delete rows");
                 System.out.println("New file is for deletion tracking");
             }catch(Exception e){
-                System.out.println(e);
+                e.printStackTrace();;
             }
         }else{
             // System.out.println("File exists already");

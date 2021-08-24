@@ -8,9 +8,9 @@ public class JoinConstraint{
         this.joinObj = joinObj;
     }
     public JoinConstraint on(Field finalField) throws IllegalStateException{
+        STATE++;
         if(STATE != 0) throw new IllegalStateException("on clause Called multiple times");
         constrainChain.add(new WrappedField(ExpressionName.AND, finalField));
-        STATE++;
         return this;
    }
 

@@ -32,7 +32,7 @@ public class Insert{
     		bw.close();
     		fw.close();
     	}catch(Exception e){
-    		System.out.println(e);
+    		e.printStackTrace();;
     	}
         return 0; 
     }

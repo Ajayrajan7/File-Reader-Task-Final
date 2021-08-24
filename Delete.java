@@ -20,7 +20,7 @@ public class Delete{
             this.zeroCount=Integer.parseInt(p.getProperty(tablename));
             this.deleteLimit = Integer.parseInt(p2.getProperty("limit"));
         }catch(IOException e){
-            System.out.println(e);
+            e.printStackTrace();;
         } 
         
    }
@@ -52,11 +52,11 @@ public class Delete{
             }
             return true;
        }catch(FileNotFoundException e){
-           System.out.println(e);
+           e.printStackTrace();;
        }catch(RowExhausedException e){
-           System.out.println(e);
+           e.printStackTrace();;
        }catch(IOException e){
-           System.out.println(e);
+           e.printStackTrace();;
        }
     return false;
         
@@ -68,7 +68,7 @@ public class Delete{
             OutputStream output = new FileOutputStream(filePath);
             p.store(output,null);
        }catch(Exception e){
-           System.out.println(e);
+           e.printStackTrace();;
        }
         
    }
@@ -83,7 +83,7 @@ public class Delete{
             setZeroCount(zeroCount);
             return true;
        }catch(IOException e){
-           System.out.println(e);
+           e.printStackTrace();;
        }
     return false;
    }

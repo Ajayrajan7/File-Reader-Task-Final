@@ -12,7 +12,7 @@ public class MainCode{
 			// getAllRecordsWithQuery("table1");
 			
 		}catch(Exception e){
-			System.out.println(e);
+			e.printStackTrace();;
 		}
 	}
 
@@ -32,7 +32,7 @@ public class MainCode{
 				i++;
 			}
 		}catch(Exception e){
-			System.out.println(e);
+			e.printStackTrace();;
 		}
 
 	}
@@ -54,7 +54,7 @@ public class MainCode{
 				i++;
 			}
 		}catch(Exception e){
-			System.out.println(e);
+			e.printStackTrace();;
 		}
 
 	}
@@ -69,7 +69,7 @@ public class MainCode{
 			u.executeQuery();
 			System.out.println("Updation done!");
 		}catch(Exception e){
-			System.out.println(e);
+			e.printStackTrace();;
 		}
 	}
 
@@ -80,7 +80,7 @@ public class MainCode{
 			d.executeQuery();
 			System.out.println("Deletion done!");
 		}catch(Exception e){
-			System.out.println(e);
+			e.printStackTrace();;
 		}
 	}
 
@@ -132,7 +132,7 @@ public class MainCode{
 
 			System.out.println("Insertion done!");
 		}catch(Exception e){
-			System.out.println(e);
+			e.printStackTrace();;
 		}
 		
 	}
@@ -147,7 +147,7 @@ public class MainCode{
 				System.out.println("Location: "+r.getString("table2.location"));
 			}
 		}catch(Exception e){
-			System.out.println(e);
+			e.printStackTrace();;
 		}
 	}
 }
