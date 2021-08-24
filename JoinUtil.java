@@ -24,7 +24,7 @@ public class JoinUtil {
     // }
 
     public void initializeFile(String tempFileName){
-        path = GetTableDetails.dataPath+File.separator+"temp"+File.separator+tempFileName+".txt";
+        path = GetTableDetails.dataPath+File.separator+tempFileName+".txt";
         System.out.println("Join temp path = "+path);
         try{
             fw = new FileWriter(path, true);

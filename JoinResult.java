@@ -29,7 +29,7 @@ public class JoinResult extends Join{
     public List<Row> getRows(){
         String tempTableName = getLHSTableName();
         try{
-            RowGenerator rowGen = new RowGenerator(tempTableName,true);
+            RowGenerator rowGen = new RowGenerator(tempTableName);
             List<Row> results = new ArrayList<>();
             while(rowGen.hasNext()){
                 Row r = rowGen.next();
