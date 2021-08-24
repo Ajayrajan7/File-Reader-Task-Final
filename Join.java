@@ -5,18 +5,18 @@ public class Join{
     private String tempFileName = JoinUtil.calculatedTempFileName();
     private JoinResult jr = new JoinResult(tempFileName,chainedTableName);
     private JoinConstraint joinConstraint = new JoinConstraint(this);
-    private TYPES type;
+    private JOINTYPES type;
     private String LHSTableName;
     private String RHSTableName;
     public JoinConstraint leftJoin(String RHSTableName) throws JoinException,NoSuchTableException{
-            type = TYPES.LEFTJOIN;
+            type = JOINTYPES.LEFTJOIN;
             addTableName(RHSTableName,true);
             setRHSTableName(RHSTableName);
             return joinConstraint;
     }
 
     public JoinConstraint innerJoin(String RHSTableName) throws JoinException,NoSuchTableException{
-            type = TYPES.INNERJOIN;
+            type = JOINTYPES.INNERJOIN;
             addTableName(RHSTableName,true);
             setRHSTableName(RHSTableName);
             
@@ -25,7 +25,7 @@ public class Join{
     }
 
     public JoinConstraint rightJoin(String RHSTableName) throws JoinException,NoSuchTableException{
-            type = TYPES.RIGHTJOIN;
+            type = JOINTYPES.RIGHTJOIN;
             addTableName(RHSTableName,true);
             setRHSTableName(RHSTableName);
             //  checkStateAndThrowException();
@@ -68,7 +68,7 @@ public class Join{
         return tempFileName;
     }
 
-    public TYPES getType(){
+    public JOINTYPES getType(){
         return type;
     }
     //API to access joins
@@ -180,7 +180,7 @@ enum FIELDTYPES {
 // )
 
 
-enum TYPES {
+enum JOINTYPES {
         LEFTJOIN,
         RIGHTJOIN,
         INNERJOIN,

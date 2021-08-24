@@ -131,27 +131,27 @@ public class GetTableDetails {
         }
         return null;
     }
-    private static Types getClassName(String str) throws ClassNotFoundException{
+    private static DataTypes getClassName(String str) throws ClassNotFoundException{
         // String Capitalized = str.toLowerCase().substring(0, 1).toUpperCase() + str.substring(1);
         String dataTypeName = str.toUpperCase();
         if(dataTypeName.equals("INTEGER")){
-            return Types.INTEGER;
+            return DataTypes.INTEGER;
         }else if(dataTypeName.equals("STRING")){
-            return Types.STRING;
+            return DataTypes.STRING;
         }else if(dataTypeName.equals("FLOAT")){
-            return Types.FLOAT;
+            return DataTypes.FLOAT;
         }else if(dataTypeName.equals("LONG")){
-            return Types.LONG;
+            return DataTypes.LONG;
         }else if(dataTypeName.equals("DOUBLE")){
-            return Types.DOUBLE;
+            return DataTypes.DOUBLE;
         }else  if(dataTypeName.equals("BOOLEAN")){
-            return Types.BOOLEAN;
+            return DataTypes.BOOLEAN;
         }
         return null;
     }
 }
 
-enum Types {
+enum DataTypes {
     INTEGER,
     STRING,
     FLOAT,

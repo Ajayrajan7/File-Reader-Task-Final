@@ -28,7 +28,7 @@ public class RowGenerator implements RowGeneratorImpl{
 			//Iterating each column in the buffer.
 			for(String key:tablesVsFieldDetails.keySet()){
 				String data = (new String(buffer,ptr,columnVsSize.get(key)-1)).trim();
-				Types type = tablesVsFieldDetails.get(key);
+			 DataTypes type = tablesVsFieldDetails.get(key);
 				// System.out.println(ptr+" "+columnVsSize.get(key));
 				// System.out.println(key+" "+data+" "+type);
 				//Finding the type of the current column and typecasting it to object type
