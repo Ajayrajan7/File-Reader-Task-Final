@@ -1,5 +1,6 @@
+import java.io.FileNotFoundException;
 import java.util.*;
-public class JoinResult extends Join implements RowGeneratorImpl{
+public class JoinResult extends Join{
     public JoinResult(String tempTableName,List<String> chainedTableName){
         try{
             setLHSTableName(tempTableName,false);
@@ -12,17 +13,17 @@ public class JoinResult extends Join implements RowGeneratorImpl{
         this.chainedTableName = chainedTableName;
     }
 
-    @Override
-	public boolean hasNext(){
-        return false;
-    }
-    /**
-     * @return Row of two joined tables combined together with all fields
-     */
-    @Override 
-    public Row next(){
+    // @Override
+	// public boolean hasNext(){
+    //     return false;
+    // }
+    // /**
+    //  * @return Row of two joined tables combined together with all fields
+    //  */
+    // @Override 
+    // public Row next(){
 
-    }
+    // }
  
     public List<Row> getRows(){
         String tempTableName = getLHSTableName();
@@ -35,6 +36,8 @@ public class JoinResult extends Join implements RowGeneratorImpl{
             }   
             return results;
        }catch(RowExhausedException e){
+           System.out.println(e);
+       }catch(FileNotFoundException e){
            System.out.println(e);
        }
        return null;

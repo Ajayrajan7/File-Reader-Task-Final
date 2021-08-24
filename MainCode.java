@@ -122,7 +122,7 @@ public class MainCode{
 			HashMap<String,Object> data5 = new HashMap<>();
 			
 			data5.put("password","samp5");
-			data5.put("id",9);
+			data5.put("id",5);
 			data5.put("email","chella@gmail.com");
 			data5.put("name","Chellathurai");
 			list.add(data5);
@@ -140,7 +140,7 @@ public class MainCode{
 	public static void performJoin(){
 		try{
 			JoinResult jr = (new Select("table1")).innerJoin("table2").
-			on(new Field("table1","id").equals(new Field("table2","user_id"))).getResult();
+			on(new Field("table1","id").eq(new Field("table2","user_id"))).getResult();
 			List<Row>  rows = jr.getRows();
 			for(Row r:rows){
 				System.out.println("Name:" + r.getString("table1.name"));

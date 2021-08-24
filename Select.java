@@ -8,7 +8,7 @@ public class Select extends Join{
    private Set<String> columnsSet;
    private Set<String> actualCols;
 
-   public Select(String tablename){
+   public Select(String tablename) throws NoSuchTableException{
         setLHSTableName(tablename,true);
         this.tablename = tablename;
    }

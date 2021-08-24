@@ -16,7 +16,7 @@ public class Field{
     }
 
     
-    public Field equals(Object RHSFieldOrConstValue) throws IllegalArgumentException{
+    public Field eq(Object RHSFieldOrConstValue) throws IllegalArgumentException{
         operator = Operator.EQU;
         castGivenArgument(RHSFieldOrConstValue);
         return this;
