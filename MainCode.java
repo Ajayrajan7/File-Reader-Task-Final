@@ -5,10 +5,10 @@ public class MainCode{
 		try{
 			GetTableDetails.initialize(" ");
 
-			insertRecords("table1");
+			// insertRecords("table2");
 			// deleteAllRecords("table1");
-			getAllRecords("table1");
-			// performJoin();
+			// getAllRecords("table2");
+			performJoin();
 			// getAllRecordsWithQuery("table1");
 			
 		}catch(Exception e){
@@ -26,9 +26,9 @@ public class MainCode{
 			System.out.println("\nResults:");
 			for(Row r:results){
 				System.out.println("\nRecord "+i);
-				System.out.println("id: "+r.getInt("id"));
-				System.out.println("name: "+r.getString("name"));
-				System.out.println("email: "+r.getString("email"));
+				System.out.println("id: "+r.getInt("user_id"));
+				System.out.println("location: "+r.getString("location"));
+				// System.out.println("email: "+r.getString("email"));
 				i++;
 			}
 		}catch(Exception e){
@@ -89,43 +89,43 @@ public class MainCode{
 			List<HashMap<String,Object>> list = new ArrayList<>();
 			HashMap<String,Object> data = new HashMap<>();
 			
-			data.put("password","samp");
-			data.put("id",1);
-			data.put("email","Ajay@gmail.com");
-			data.put("name","Ajay Rajan");
+			// data.put("password","samp");
+			data.put("user_id",1);
+			// data.put("email","Ajay@gmail.com");
+			data.put("location","Madurai");
 			list.add(data);
 
 			HashMap<String,Object> data2 = new HashMap<>();
 			
-			data2.put("password","samp2");
-			data2.put("id",2);
-			data2.put("email","Ajith@gmail.com");
-			data2.put("name","Ajith");
+			// data2.put("password","samp2");
+			data2.put("user_id",2);
+			// data2.put("email","Ajith@gmail.com");
+			data2.put("location","Chennai");
 			list.add(data2);
 
 			HashMap<String,Object> data3 = new HashMap<>();
 			
-			data3.put("password","samp3");
-			data3.put("id",3);
-			data3.put("email","Ashok@gmail.com");
-			data3.put("name","Ashok K");
+			// data3.put("password","samp3");
+			data3.put("user_id",3);
+			// data3.put("email","Ashok@gmail.com");
+			data3.put("location","Coimbatore");
 			list.add(data3);
 
 			HashMap<String,Object> data4 = new HashMap<>();
 			
-			data4.put("password","samp4");
-			data4.put("id",4);
-			data4.put("email","Arun@gmail.com");
-			data4.put("name","Arun kumar");
+			// data4.put("password","samp4");
+			data4.put("user_id",4);
+			// data4.put("email","Arun@gmail.com");
+			data4.put("location","Trichy");
 			list.add(data4);
 
-			HashMap<String,Object> data5 = new HashMap<>();
+			// HashMap<String,Object> data5 = new HashMap<>();
 			
-			data5.put("password","samp5");
-			data5.put("id",5);
-			data5.put("email","chella@gmail.com");
-			data5.put("name","Chellathurai");
-			list.add(data5);
+			// data5.put("password","samp5");
+			// data5.put("id",5);
+			// data5.put("email","chella@gmail.com");
+			// data5.put("name","Chellathurai");
+			// list.add(data5);
 
 			Insert r = new Insert(tablename,list);
 			r.addToTable();
@@ -139,7 +139,7 @@ public class MainCode{
 	
 	public static void performJoin(){
 		try{
-			JoinResult jr = (new Select("table1")).innerJoin("table2").
+			JoinResult jr = new Select("table1").innerJoin("table2").
 			on(new Field("table1","id").eq(new Field("table2","user_id"))).getResult();
 			List<Row>  rows = jr.getRows();
 			for(Row r:rows){
