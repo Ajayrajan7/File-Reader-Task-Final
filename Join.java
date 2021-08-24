@@ -77,6 +77,10 @@ public class Join{
         try{
             String lhsTable = getLHSTableName();
             String rhsTable = getRHSTableName();
+            if(getType() == JOINTYPES.RIGHTJOIN){
+                rhsTable = getLHSTableName();
+                lhsTable = getRHSTableName();
+            }
             RowGenerator lhsPtr = new RowGenerator(lhsTable,false);
             RowGenerator rhsPtr = new RowGenerator(rhsTable,false);
             
