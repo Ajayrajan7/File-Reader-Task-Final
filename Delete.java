@@ -20,7 +20,7 @@ public class Delete{
             this.zeroCount=Integer.parseInt(p.getProperty(tablename));
             this.deleteLimit = Integer.parseInt(p2.getProperty("limit"));
         }catch(IOException e){
-            e.printStackTrace();;
+            e.printStackTrace();
         } 
         
    }
@@ -52,38 +52,50 @@ public class Delete{
             }
             return true;
        }catch(FileNotFoundException e){
-           e.printStackTrace();;
+           e.printStackTrace();
        }catch(RowExhausedException e){
-           e.printStackTrace();;
+           e.printStackTrace();
        }catch(IOException e){
-           e.printStackTrace();;
+           e.printStackTrace();
        }
     return false;
         
    }
    private void setZeroCount(int zeroCount){
+       OutputStream output = null;
        try{
             Properties p = new Properties();
             p.setProperty(tablename,String.valueOf(zeroCount));
-            OutputStream output = new FileOutputStream(filePath);
+            output = new FileOutputStream(filePath);
             p.store(output,null);
        }catch(Exception e){
-           e.printStackTrace();;
+           e.printStackTrace();
+       }finally{
+            try{
+                output.close();
+            }catch(IOException e){
+                e.printStackTrace();
+            }
        }
         
    }
    private boolean deleteRowHelper(Row r){
+        RandomAccessFile file = null;
        try{
-            RandomAccessFile file = FileUtil.getRandomAccessInstance(tablename);  
+            file = FileUtil.getRandomAccessInstance(tablename);  
             file.seek(r.getSeekPos()-1);  
             file.write("0".getBytes());  
-            FileUtil.releaseFile();
-            file.close();
             zeroCount++;
             setZeroCount(zeroCount);
             return true;
        }catch(IOException e){
            e.printStackTrace();;
+       }finally{
+           try{
+                file.close();
+           }catch(IOException e){
+                e.printStackTrace();
+           }
        }
     return false;
    }

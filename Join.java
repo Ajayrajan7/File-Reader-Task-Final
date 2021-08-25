@@ -136,6 +136,7 @@ public class Join{
         LinkedHashMap<String,DataTypes> lhsFieldDetails = GetTableDetails.tablesVsFieldDetails.get(lhsTable);
         LinkedHashMap<String,DataTypes> rhsFieldDetails = GetTableDetails.tablesVsFieldDetails.get(rhsTable);
         LinkedHashMap<String,DataTypes> tempFileVsFieldDetails = new LinkedHashMap<>();
+        
         for(Map.Entry<String,DataTypes> entry:lhsFieldDetails.entrySet()){
             if(!entry.getKey().contains("."))
                 tempFileVsFieldDetails.put(lhsTable+"."+entry.getKey(), entry.getValue());

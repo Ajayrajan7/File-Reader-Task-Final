@@ -43,6 +43,7 @@ public class Select extends Join{
                     if(columns==null || columns.length==0)
                         results.add(r);
                     else{
+                        
                         sendOnlyRequestedCols();
                         results.add(r);
                     }
@@ -50,9 +51,9 @@ public class Select extends Join{
             }   
             return results;
        }catch(RowExhausedException e){
-           e.printStackTrace();;
+           e.printStackTrace();
        }catch(FileNotFoundException e){
-           e.printStackTrace();;
+           e.printStackTrace();
        }
        return null;
    }

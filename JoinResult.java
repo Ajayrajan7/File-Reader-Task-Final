@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 public class JoinResult extends Join{
     public JoinResult(String tempTableName,List<String> chainedTableName){
@@ -49,9 +50,13 @@ public class JoinResult extends Join{
      * This method should be called interanally once the join results exhausted.
      */
     private void deleteFile(){
-        /*
-        Delete the file with the name of the tempTableName
-        */
+        String tempTableName = getLHSTableName();
+        try{
+            File file = new File(GetTableDetails.dataPath+File.separator+tempTableName+".txt");
+            file.delete();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void finalize(){

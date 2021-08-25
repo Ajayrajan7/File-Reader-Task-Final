@@ -20,8 +20,20 @@ public class GetTableDetails {
 
     public static Properties parseProps(String path) throws IOException{
         Properties p = new Properties();
-        FileReader f = new FileReader(path);
-        p.load(f);
+        FileReader f = null;
+        
+        try{
+            f = new FileReader(path);
+            p.load(f);
+        }catch(IOException e){
+            throw new IOException(e);
+        }finally{
+            try{
+                f.close();
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+        }
         return p;
     }
     private static void createFileIfNotExists(String key){
@@ -39,15 +51,23 @@ public class GetTableDetails {
     }
     private static void createPropsFileForDeletionTracking(String key){
         File f = new File(confPath+File.separator+key+".props");
+        FileOutputStream fileOutputStream = null;
         if(!f.exists()){
             try{
                 f.createNewFile();
+                fileOutputStream = new FileOutputStream(confPath+File.separator+key+".props");
                 Properties p = new Properties();
                 p.setProperty(key,"0");
-                p.store(new FileOutputStream(confPath+File.separator+key+".props"),"Props file for tracking delete rows");
+                p.store(fileOutputStream,"Props file for tracking delete rows");
                 System.out.println("New file is for deletion tracking");
             }catch(Exception e){
-                e.printStackTrace();;
+                e.printStackTrace();
+            }finally{
+                try{
+                    fileOutputStream.close();
+                }catch(IOException e){
+                    e.printStackTrace();
+                }
             }
         }else{
             // System.out.println("File exists already");

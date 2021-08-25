@@ -17,9 +17,11 @@ public class Insert{
     public int addToTable() throws Exception{
     	String path=GetTableDetails.dataPath+File.separator+fileName+".txt";
     	FileWriter fw = new FileWriter(path, true);
+		BufferedWriter bw = null;
+		PrintWriter out = null;
     	try{
-    		BufferedWriter bw = new BufferedWriter(fw);
-    		PrintWriter out = new PrintWriter(bw);
+    		bw = new BufferedWriter(fw);
+    		out = new PrintWriter(bw);
 
     		for(LinkedHashMap<String,Object> map:OrderedRows){
 				out.print(1);
@@ -28,12 +30,19 @@ public class Insert{
     			}
     			out.print("\n");
     		} 
-    		out.close();
-    		bw.close();
-    		fw.close();
+    		
     	}catch(Exception e){
-    		e.printStackTrace();;
-    	}
+    		e.printStackTrace();
+    	}finally{
+			try {
+                out.close();
+				bw.close();
+				fw.close();
+            }
+            catch(IOException e){
+                e.printStackTrace();
+            }
+		}
         return 0; 
     }
 
@@ -48,13 +57,7 @@ public class Insert{
 
     	for(Map.Entry<String,DataTypes> entry:realOrder.entrySet()){
     		if(map.get(entry.getKey())!=null){
-    			// if(entry.getValue().toString().equals("class java.lang.String")){
-	    		// 	String val = (String)map.get(entry.getKey());
-	    		// 	val= val.replaceAll(" ","\\\\s");
-	    		// 	finalOrder.put(entry.getKey(),val);
-	    		// }
-	    		// else
-    				finalOrder.put(entry.getKey(),map.get(entry.getKey()));
+				finalOrder.put(entry.getKey(),map.get(entry.getKey()));
     		}
     	}
     	OrderedRows.add(finalOrder);
