@@ -23,7 +23,7 @@ public class MainCode{
 			List<Row> results=s.executeQuery();
 			
 			int i=1;
-			System.out.println("\nResults:");
+			System.out.println("\nResults:\n");
 			for(Row r:results){
 				System.out.println("\nRecord "+i);
 				System.out.println("id: "+r.getInt("user_id"));
@@ -160,7 +160,7 @@ public class MainCode{
 			on(new Field("table1","id").eq(new Field("table2","user_id"))).getResult();
 			
 			// List<Row>  rows = jr.getRows();
-			// System.out.println("\n Join Results::");
+			// System.out.println("\nJoin Results::");
 			// for(Row r:rows){
 			// 	System.out.println("Name:" + r.getString("table1.name"));
 			// 	System.out.println("Location: "+r.getString("table2.location"));
