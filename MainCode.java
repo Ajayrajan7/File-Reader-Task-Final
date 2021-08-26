@@ -1,16 +1,15 @@
 import java.util.*;
 
 public class MainCode{
-	public static void main(String[] args){
+	public static void main(String[] args) throws Exception{
 		try{
 			GetTableDetails.initialize(" ");
 			// insertRecords("table5");
 			// deleteAllRecords("table1");
 			// getAllRecords("table4");
-			// performJoin();
+			performJoin();
 			// getAllRecordsWithQuery("table1");
 			// createTable("table5");
-			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -156,27 +155,27 @@ public class MainCode{
 			JoinResult jr = new Select("table1").rightJoin("table2").
 			on(new Field("table1","id").eq(new Field("table2","user_id"))).getResult();
 			
-			List<Row>  rows = jr.getRows();
-			System.out.println("\nJoin Results::");
-			for(Row r:rows){
-				System.out.println("Name:" + r.getInt("table1.id"));
-				System.out.println("Location: "+r.getInt("table2.id"));
-			}
+			// List<Row>  rows = jr.getRows();
+			// System.out.println("\nJoin Results::");
+			// for(Row r:rows){
+			// 	System.out.println("Name:" + r.getInt("table1.id"));
+			// 	System.out.println("Location: "+r.getInt("table2.id"));
+			// }
 
-			// JoinResult jr2 = jr.innerJoin("table3").on(new Field("table2", "location").eq(new Field("table3", "city"))).getResult();
-			// // List<Row> row2 = jr2.getRows();
-			// // for(Row r:row2){
-			// // 	System.out.println(r.getRowDetails());
-			// // }
-
-			// JoinResult jr3 = jr2.innerJoin("table4").on(new Field("table1","id").
-			// 				eq(new Field("table4","id"))).and(new Field("table3","city").
-			// 				eq(new Field("table4","city"))).getResult();
-			
-			// List<Row> row3 = jr3.getRows();
-			// for(Row r:row3){
+			JoinResult jr2 = jr.innerJoin("table3").on(new Field("table2", "location").eq(new Field("table3", "city"))).getResult();
+			// List<Row> row2 = jr2.getRows();
+			// for(Row r:row2){
 			// 	System.out.println(r.getRowDetails());
 			// }
+
+			JoinResult jr3 = jr2.innerJoin("table4").on(new Field("table1","id").
+							eq(new Field("table4","id"))).and(new Field("table3","city").
+							eq(new Field("table4","city"))).getResult();
+			
+			List<Row> row3 = jr3.getRows();
+			for(Row r:row3){
+				System.out.println(r.getRowDetails());
+			}
 
 		}catch(Exception e){
 			e.printStackTrace();
