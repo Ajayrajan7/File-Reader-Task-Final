@@ -36,7 +36,7 @@ public class GetTableDetails {
         }
         return p;
     }
-    private static void createFileIfNotExists(String key){
+    public static void createFileIfNotExists(String key){
         File f = new File(dataPath+File.separator+key+".txt");
         if(!f.exists()){
             try{
@@ -49,7 +49,7 @@ public class GetTableDetails {
             // System.out.println("File exists already");
         }
     }
-    private static void createPropsFileForDeletionTracking(String key){
+    public static void createPropsFileForDeletionTracking(String key){
         File f = new File(confPath+File.separator+key+".props");
         FileOutputStream fileOutputStream = null;
         if(!f.exists()){
@@ -131,7 +131,7 @@ public class GetTableDetails {
         return fieldVsSize;
     }
 
-    private static Integer getSizeForType(String str) throws ClassNotFoundException{
+    public static Integer getSizeForType(String str){
         String Capitalized = str.toLowerCase().substring(0, 1).toUpperCase() + str.substring(1);
         if(Capitalized.equals("String")){
             // return 1000;
@@ -151,7 +151,7 @@ public class GetTableDetails {
         }
         return null;
     }
-    private static DataTypes getClassName(String str) throws ClassNotFoundException{
+    public static DataTypes getClassName(String str){
         // String Capitalized = str.toLowerCase().substring(0, 1).toUpperCase() + str.substring(1);
         String dataTypeName = str.toUpperCase();
         if(dataTypeName.equals("INTEGER")){

@@ -4,12 +4,12 @@ public class MainCode{
 	public static void main(String[] args){
 		try{
 			GetTableDetails.initialize(" ");
-
-			// insertRecords("table4");
+			// insertRecords("table5");
 			// deleteAllRecords("table1");
 			// getAllRecords("table4");
-			performJoin();
+			// performJoin();
 			// getAllRecordsWithQuery("table1");
+			// createTable("table5");
 			
 		}catch(Exception e){
 			e.printStackTrace();
@@ -88,12 +88,9 @@ public class MainCode{
 		try{
 			List<HashMap<String,Object>> list = new ArrayList<>();
 			HashMap<String,Object> data = new HashMap<>();
-			
-			// data.put("password","samp");
+			data.put("name","Ajay");
+			data.put("age",2);
 			data.put("id",1);
-			// data.put("email","Ajay@gmail.com");
-			data.put("city","Madurai");
-			data.put("rent",8000);
 			list.add(data);
 
 			// HashMap<String,Object> data2 = new HashMap<>();
@@ -181,6 +178,22 @@ public class MainCode{
 			// 	System.out.println(r.getRowDetails());
 			// }
 
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	public static void createTable(String tablename){
+		try{
+			CreateTable ct = new CreateTable(tablename);
+			ct.addColumn("name", "string");
+			ct.addColumn("id", "integer");
+			ct.addColumn("age", "integer");
+			if(ct.create()){
+				System.out.println("Table created successfully");
+			}else{
+				System.out.println("Table not created");
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}

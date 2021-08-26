@@ -2,3 +2,5 @@ table1=id:Integer,name:String,email:String,password:String
 table2=user_id:Integer,location:String
 table3=city:String
 table4=id:Integer,city:String,rent:Integer
+#Thu Aug 26 12:51:52 IST 2021
+table5=name\:string,id\:integer,age\:integer
