@@ -172,10 +172,33 @@ public class GetTableDetails {
 }
 
 enum DataTypes {
-    INTEGER,
-    STRING,
-    FLOAT,
-    LONG,
-    DOUBLE,
-    BOOLEAN
+    INTEGER(10),
+    STRING(30),
+    FLOAT(15),
+    LONG(16),
+    DOUBLE(20),
+    BOOLEAN(1);
+    public final int size;
+    private DataTypes(int size){
+        this.size = size;
+    }
+
+    public int getSize(){
+        return size;
+    }
+
 }
+
+
+/*API ref
+
+public int getSize(DataTypes dty){
+    return dty.getSize();
+}
+
+int size = getSize(DataTypes.INTEGER);
+
+*/
+
+
+
