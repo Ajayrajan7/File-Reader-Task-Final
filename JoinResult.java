@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.*;
 public class JoinResult extends Join{
     public JoinResult(String tempTableName,List<String> chainedTableName){
@@ -38,9 +37,9 @@ public class JoinResult extends Join{
             }   
             return results;
        }catch(RowExhausedException e){
-           e.printStackTrace();;
+           e.printStackTrace();
        }catch(FileNotFoundException e){
-           e.printStackTrace();;
+           e.printStackTrace();
        }
        return null;
         
