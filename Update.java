@@ -63,13 +63,8 @@ public class Update{
             e.printStackTrace();;
         }
         finally{
-            try {
-                FileUtil.releaseFile();
-                raf.close();
-            }
-            catch(IOException e){
-                e.printStackTrace();
-            }
+            FileUtil.safeClose(raf);
+            FileUtil.releaseFile();
         }
         return false;
    }

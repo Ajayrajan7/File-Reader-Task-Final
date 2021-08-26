@@ -71,11 +71,7 @@ public class Delete{
        }catch(Exception e){
            e.printStackTrace();
        }finally{
-            try{
-                output.close();
-            }catch(IOException e){
-                e.printStackTrace();
-            }
+        FileUtil.safeClose(output);
        }
         
    }
@@ -91,11 +87,7 @@ public class Delete{
        }catch(IOException e){
            e.printStackTrace();;
        }finally{
-           try{
-                file.close();
-           }catch(IOException e){
-                e.printStackTrace();
-           }
+           FileUtil.safeClose(file);
        }
     return false;
    }

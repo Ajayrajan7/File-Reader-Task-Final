@@ -87,13 +87,7 @@ public class RowGenerator implements RowGeneratorImpl{
       		return true;
 	   	} catch(EOFException e){
 	      	e.printStackTrace();
-			try {
-				FileUtil.releaseFile();
-				raf.close();
-			}
-			catch(IOException ex){
-				ex.printStackTrace();
-			}
+			 FileUtil.safeClose(raf);
 			FileUtil.releaseFile();
 	   	}catch(IOException e){
 			e.printStackTrace();;

@@ -28,11 +28,7 @@ public class GetTableDetails {
         }catch(IOException e){
             throw new IOException(e);
         }finally{
-            try{
-                f.close();
-            }catch(IOException e){
-                e.printStackTrace();
-            }
+            FileUtil.safeClose(f);
         }
         return p;
     }
@@ -63,11 +59,7 @@ public class GetTableDetails {
             }catch(Exception e){
                 e.printStackTrace();
             }finally{
-                try{
-                    fileOutputStream.close();
-                }catch(IOException e){
-                    e.printStackTrace();
-                }
+                FileUtil.safeClose(fileOutputStream);
             }
         }else{
             // System.out.println("File exists already");

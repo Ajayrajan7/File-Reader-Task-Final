@@ -23,7 +23,7 @@ public class Seek {
       // raf.seek(0);
       raf.readFully(buffer);
       System.out.println(new String(buffer));
-      raf.close();
+      FileUtil.safeClose(raf);
      
       // int i=0;
       // while(true){

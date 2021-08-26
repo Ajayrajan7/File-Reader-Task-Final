@@ -43,11 +43,7 @@ public class CreateTable {
        }catch(Exception e){
            e.printStackTrace();
        }finally{
-            try{
-                output.close();
-            }catch(IOException e){
-                e.printStackTrace();
-            }
+            FileUtil.safeClose(output);
        }
     }
 }   

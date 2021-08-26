@@ -34,14 +34,9 @@ public class Insert{
     	}catch(Exception e){
     		e.printStackTrace();
     	}finally{
-			try {
-                out.close();
-				bw.close();
-				fw.close();
-            }
-            catch(IOException e){
-                e.printStackTrace();
-            }
+			FileUtil.safeClose(out);
+			FileUtil.safeClose(bw);
+			FileUtil.safeClose(fw);
 		}
         return 0; 
     }

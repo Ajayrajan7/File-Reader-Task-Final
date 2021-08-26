@@ -8,15 +8,26 @@ public class FileUtil {
     }
 
     public static void releaseFile(){
-        noOfDescriptors.decrementAndGet();
+        noOfDescriptors.decrementAndGet();b
     }
-
+\b
 
     public synchronized boolean checkZeroReferences(){
         if(noOfDescriptors.get()==0) return true;
         return false;
     }
+
+    public static void safeClose(Closeable closeable){
+        try{
+            closeable.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 }
+
+
 
 class FileDeleteUtil {
    public static synchronized int deleteLines(String tableName) throws IOException{
@@ -51,8 +62,8 @@ class FileDeleteUtil {
     }
     finally{
         try{
-            inputFileReader.close();
-            outputFileWriter.close();
+            FileUtil.safeClose(inputFileReader);
+            FileUtil.safeClose(outputFileWriter);
             
             //delete old file
             File file1 = new File(origFile);

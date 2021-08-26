@@ -82,13 +82,9 @@ public class JoinUtil {
         
     } 
     public void flush(){
-        try{
-            out.close();
-    		bw.close();
-    		fw.close();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+        FileUtil.safeClose(out);
+        FileUtil.safeClose(bw);
+        FileUtil.safeClose(fw);
     }
     
 }
