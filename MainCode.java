@@ -4,10 +4,10 @@ public class MainCode{
 	public static void main(String[] args) throws Exception{
 		try{
 			GetTableDetails.initialize(" ");
-			// insertRecords("table5");
+			insertRecords("table5");
 			// deleteAllRecords("table1");
 			// getAllRecords("table4");
-			performJoin();
+			// performJoin();
 			// getAllRecordsWithQuery("table1");
 			// createTable("table5");
 		}catch(Exception e){
@@ -185,9 +185,9 @@ public class MainCode{
 	public static void createTable(String tablename){
 		try{
 			CreateTable ct = new CreateTable(tablename);
-			ct.addColumn("name", "string");
-			ct.addColumn("id", "integer");
-			ct.addColumn("age", "integer");
+			ct.addColumn("name", DataTypes.STRING);
+			ct.addColumn("id", DataTypes.INTEGER);
+			ct.addColumn("age", DataTypes.INTEGER);
 			if(ct.create()){
 				System.out.println("Table created successfully");
 			}else{

@@ -8,7 +8,7 @@ public class GetTableDetails {
     static String dataPath="";
     static String confPath="";
     
-    public static void initialize(String path) throws IOException{
+    public static void initialize(String path) throws IOException,IllegalTypeException{
         
         Properties props = parseProps(System.getProperty("user.dir")+File.separator+"config.props");
         dataPath = props.getProperty("DataLocation");
@@ -78,23 +78,21 @@ public class GetTableDetails {
         return tablesVsFieldDetails.get(tableName);
     }
 
-    private static void createTablesVsFields(Properties properties){
+    private static void createTablesVsFields(Properties properties) throws IllegalTypeException{
 
         for(String key : properties.stringPropertyNames()) {
             createFileIfNotExists(key);
             createPropsFileForDeletionTracking(key);
             String value = properties.getProperty(key);
-            try {
-                tablesVsFieldDetails.put(key,getFieldVsTypes_(value));
-                tableVsSize.put(key,getFieldVsSize(value));
-            }
-            catch(ClassNotFoundException e){
-                throw new RuntimeException(e);
-            }
+            
+            LinkedHashMap<String,DataTypes> fieldVsType = getFieldVsTypes_(value);
+            tablesVsFieldDetails.put(key,fieldVsType);
+            tableVsSize.put(key,getFieldVsSize(fieldVsType));
+            
           }
     }
 
-    private static LinkedHashMap<String,DataTypes> getFieldVsTypes_(String tableBuffer)throws IllegalArgumentException,ClassNotFoundException{
+    private static LinkedHashMap<String,DataTypes> getFieldVsTypes_(String tableBuffer)throws IllegalArgumentException,IllegalTypeException{
         LinkedHashMap<String,DataTypes> fieldVsTypes = new LinkedHashMap<String,DataTypes>();
         String[] values = null ;
         for(String entry : tableBuffer.split(",")){
@@ -110,49 +108,24 @@ public class GetTableDetails {
         }
         return fieldVsTypes;
     }
-    private static LinkedHashMap<String,Integer> getFieldVsSize(String tableBuffer)throws IllegalArgumentException,ClassNotFoundException{
+    
+    private static LinkedHashMap<String,Integer> getFieldVsSize(LinkedHashMap<String,DataTypes> fieldVsType){
         LinkedHashMap<String,Integer> fieldVsSize = new LinkedHashMap<String,Integer>();
-        String[] values = null ;
-        int total_size=0;
-        for(String entry : tableBuffer.split(",")){
-             values = entry.split(":");
-             if(values!=null){
-                if(values.length != 2 &&  !Fields.contains(values[1].toUpperCase())){
-                    throw new IllegalArgumentException("Field "+values[0]+" has Invalid type "+values[1]);
-                }
-                else{
-                    int x=getSizeForType(values[1]);
-                    fieldVsSize.put(values[0],x);
-                    total_size+=x; 
-                }
-            }  
+        int total_size=0,temp_size;
+        for(Map.Entry<String,DataTypes> entry:fieldVsType.entrySet()){
+            temp_size = getSizeForType(entry.getValue());
+            total_size +=temp_size; 
+            fieldVsSize.put(entry.getKey(),temp_size);
         }
         fieldVsSize.put("Total_Row_Size",total_size);
         return fieldVsSize;
     }
 
-    public static Integer getSizeForType(String str){
-        String Capitalized = str.toLowerCase().substring(0, 1).toUpperCase() + str.substring(1);
-        if(Capitalized.equals("String")){
-            // return 1000;
-            return 30;
-        }else if(Capitalized.equals("Double")){
-            // return 309;
-            return 20;
-        }else if(Capitalized.equals("Float")){
-            // return 39;
-            return 15;
-        }else if(Capitalized.equals("Integer")){
-            // return 10;
-            return 10;
-        }else if(Capitalized.equals("Long")){
-            // return 19;
-            return 16;
-        }
-        return null;
+    public static Integer getSizeForType(DataTypes type){
+        return type.getSize();
     }
-    public static DataTypes getClassName(String str){
-        // String Capitalized = str.toLowerCase().substring(0, 1).toUpperCase() + str.substring(1);
+    
+    public static DataTypes getClassName(String str) throws IllegalTypeException{
         String dataTypeName = str.toUpperCase();
         if(dataTypeName.equals("INTEGER")){
             return DataTypes.INTEGER;
@@ -167,7 +140,7 @@ public class GetTableDetails {
         }else  if(dataTypeName.equals("BOOLEAN")){
             return DataTypes.BOOLEAN;
         }
-        return null;
+        throw new IllegalTypeException("Type not found");
     }
 }
 
@@ -188,17 +161,3 @@ enum DataTypes {
     }
 
 }
-
-
-/*API ref
-
-public int getSize(DataTypes dty){
-    return dty.getSize();
-}
-
-int size = getSize(DataTypes.INTEGER);
-
-*/
-
-
-
