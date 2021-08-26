@@ -29,21 +29,22 @@ public class CreateTable {
         GetTableDetails.createPropsFileForDeletionTracking(tablename);
         GetTableDetails.tablesVsFieldDetails.put(tablename, columnList);
         GetTableDetails.tableVsSize.put(tablename,tableVsSizeDetails);
-        addToPropsFile(sb.toString());
-        return true;
+        return addToPropsFile(sb.toString());
     }
 
-    public void addToPropsFile(String value) {
+    public boolean addToPropsFile(String value) {
         OutputStream output = null;
        try{
             Properties p = new Properties();
             p.setProperty(tablename,value);
             output = new FileOutputStream(GetTableDetails.confPath+File.separator+"Tables.props",true);
             p.store(output,null);
+            return true;
        }catch(Exception e){
            e.printStackTrace();
        }finally{
             FileUtil.safeClose(output);
        }
+       return false;
     }
 }   

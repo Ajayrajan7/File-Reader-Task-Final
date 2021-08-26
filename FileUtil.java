@@ -8,9 +8,8 @@ public class FileUtil {
     }
 
     public static void releaseFile(){
-        noOfDescriptors.decrementAndGet();b
+        noOfDescriptors.decrementAndGet();
     }
-\b
 
     public synchronized boolean checkZeroReferences(){
         if(noOfDescriptors.get()==0) return true;
